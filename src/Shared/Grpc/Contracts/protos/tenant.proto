@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared.Grpc.Contracts.protos";
+
+package tenant;
+
+service TenantService {
+  rpc GetTenantById (GetTenantByIdRequest) returns (TenantResponse);
+}
+
+message GetTenantByIdRequest {
+  string tenantId = 1;
+}
+
+message TenantResponse {
+  string id = 1;
+  string name = 2;
+  string subDomain = 3;
+  string contactEmail = 4;
+  int32 planType = 5;
+}

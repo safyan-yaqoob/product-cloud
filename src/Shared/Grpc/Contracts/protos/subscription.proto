@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared.Grpc.Contracts.protos";
+
+package subscription;
+
+service SubscriptionService {
+  rpc GetActiveSubscription (GetSubscriptionRequest) returns (SubscriptionResponse);
+}
+
+message GetSubscriptionRequest {
+  string tenantId = 1;
+}
+
+message SubscriptionResponse {
+  string subscriptionId = 1;
+  int32 planType = 2;
+  string status = 3;
+  string startDate = 4;
+  string endDate = 5;
+}

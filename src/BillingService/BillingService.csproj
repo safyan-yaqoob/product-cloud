@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.1" />
+    <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
+    <PackageReference Include="Humanizer" Version="2.14.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
+    <PackageReference Include="Stripe.net" Version="48.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.1" />
+    <PackageReference Include="UUID" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+</Project>
