@@ -1,6 +1,6 @@
-namespace TenantService.Features.GetTenantById
+﻿namespace TenantService.Features.GetAllTenants
 {
-	public record GetTenantByIdResponse
+	public record GetAllTenantResponse
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }

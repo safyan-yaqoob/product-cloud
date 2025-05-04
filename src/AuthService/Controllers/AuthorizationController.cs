@@ -8,6 +8,8 @@ using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using IdentityServer.Models;
 
 namespace IdentityServer.Controllers
 {
@@ -18,16 +20,19 @@ namespace IdentityServer.Controllers
         private readonly IOpenIddictScopeManager _scopeManager;
         private readonly AuthorizationService _authService;
         private readonly IOpenIddictAuthorizationManager _authorizationManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         public AuthorizationController(
             IOpenIddictApplicationManager applicationManager,
             IOpenIddictScopeManager scopeManager,
             AuthorizationService authService,
-            IOpenIddictAuthorizationManager authorizationManager)
+            IOpenIddictAuthorizationManager authorizationManager,
+            UserManager<ApplicationUser> userManager)
         {
             _applicationManager = applicationManager;
             _scopeManager = scopeManager;
             _authService = authService;
             _authorizationManager = authorizationManager;
+            _userManager = userManager;
         }
 
         [HttpGet("~/connect/authorize")]
@@ -72,54 +77,64 @@ namespace IdentityServer.Controllers
             return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        [HttpPost("~/connect/token")]
-        public async Task<IActionResult> Exchange()
-        {
-            var request = HttpContext.GetOpenIddictServerRequest() ??
-                          throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
+		[HttpPost("~/connect/token")]
+		public async Task<IActionResult> Exchange()
+		{
+			var request = HttpContext.GetOpenIddictServerRequest() ??
+						  throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
 
-            if (!request.IsAuthorizationCodeGrantType() && 
-                !request.IsRefreshTokenGrantType())
-                throw new InvalidOperationException("The specified grant type is not supported.");
+			if (!request.IsAuthorizationCodeGrantType() &&
+				!request.IsRefreshTokenGrantType())
+				throw new InvalidOperationException("The specified grant type is not supported.");
 
-            var result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+			var result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-            var userId = result.Principal.GetClaim(Claims.Subject);
+			var email = result.Principal.GetClaim(Claims.Subject);
 
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Forbid(
-                    authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string?>
-                    {
-                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                            "Cannot find user from the token."
-                    }));
-            }
+			if (string.IsNullOrEmpty(email))
+			{
+				return Forbid(
+					authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+					properties: new AuthenticationProperties(new Dictionary<string, string?>
+					{
+						[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+						[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+							"Cannot find user from the token."
+					}));
+			}
 
-            var identity = new ClaimsIdentity(result.Principal.Claims,
-                authenticationType: TokenValidationParameters.DefaultAuthenticationType,
-                nameType: Claims.Name,
-                roleType: Claims.Role);
+			var user = await _userManager.FindByEmailAsync(email);
 
-            // Override the user claims present in the principal in case they
-            // changed since the authorization code/refresh token was issued.
-            identity.SetClaim(Claims.Subject, userId)
-                .SetClaim(Claims.Email, userId)
-                .SetClaim(Claims.Name, userId)
-                .SetClaims(Claims.Role, new List<string> { "user", "admin" }.ToImmutableArray());
+			var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType, Claims.Name, Claims.Role);
 
-            identity.SetDestinations(c => AuthorizationService.GetDestinations(identity, c));
+			// Add claims and set destinations
+			var subjectClaim = new Claim(Claims.Subject, email);
+			subjectClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+			identity.AddClaim(subjectClaim);
 
-            identity.SetScopes(request.GetScopes());
-            identity.SetResources(await _scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
+			var emailClaim = new Claim(Claims.Email, email);
+			emailClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+			identity.AddClaim(emailClaim);
 
-            // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
-            return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-        }
+			var nameClaim = new Claim(Claims.Name, $"{user.FirstName} {user.LastName}");
+			nameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+			identity.AddClaim(nameClaim);
 
-        [HttpGet("~/connect/logout")]
+			var userIdClaim = new Claim("userId", user.Id.ToString());
+			userIdClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+			identity.AddClaim(userIdClaim);
+
+			var roleClaim = new Claim(Claims.Role, "admin");
+			roleClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+			identity.AddClaim(roleClaim);
+
+			identity.SetScopes(request.GetScopes());
+			identity.SetResources(await _scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
+
+			return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+		}
+
+		[HttpGet("~/connect/logout")]
         [HttpPost("~/connect/logout")]
         public async Task<IActionResult> LogoutPost()
         {

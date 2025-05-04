@@ -5,9 +5,9 @@ namespace ProductService.Features.GetProducts
 {
   public static class ProductEndpoints
   {
-    public static RouteGroupBuilder MapGetProductEndpoint(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapGetProductsEndpoint(this RouteGroupBuilder group)
     {
-      group.MapPost("/", async ([FromBody] GetProductsQuery query, ICommandHandler<GetProductsQuery, IEnumerable<GetProductsResponse>> handler) =>
+      group.MapPost("/get-all", async ([FromBody] GetProductsQuery query, ICommandHandler<GetProductsQuery, IEnumerable<GetProductsResponse>> handler) =>
       {
         var result = await handler.Handle(query);
         return Results.Ok(result);

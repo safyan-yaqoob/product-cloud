@@ -49,7 +49,10 @@ namespace IdentityServer.Extensions
                     options.UseAspNetCore()
                             .EnableAuthorizationEndpointPassthrough()
                             .EnableTokenEndpointPassthrough();
-                }).AddClient(options =>
+
+					options.DisableAccessTokenEncryption();
+
+				}).AddClient(options =>
                 {
                     options.AllowAuthorizationCodeFlow();
                     options.AddDevelopmentEncryptionCertificate()
