@@ -1,8 +1,5 @@
 # SaaS Marketplace API Template With .NET Aspire 🚀
 
-[![Build & Test](https://github.com/your-org/product-cloud/actions/workflows/dotnet.yml/badge.svg)](https://github.com/your-org/product-cloud/actions)
-[![License: MIT](https://img.shields.io/github/license/your-org/product-cloud)](LICENSE.md)
-
 A **multi-tenant** SaaS marketplace boilerplate built with **.NET 8**, **Next.js 14**, **Tailwind CSS**, and **YARP**. Perfect starter for building and open-sourcing your own SaaS marketplace.
 
 ---
