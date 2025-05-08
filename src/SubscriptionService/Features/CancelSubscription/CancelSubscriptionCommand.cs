@@ -2,5 +2,5 @@ using SharedKernal.CQRS;
 
 namespace SubscriptionService.Features.CancelSubscription
 {
-  public record CancelSubscriptionCommand(Guid SubscriptionId): ICommand;
+    public record CancelSubscriptionCommand(Guid SubscriptionId) : ICommand;
 }

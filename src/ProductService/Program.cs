@@ -9,13 +9,13 @@ builder.AddServiceDefaults();
 
 builder.AddNpgsqlDbContext<ProductDbContext>("productDb", null, options =>
 {
-	options.UseNpgsql(
-		builder.Configuration.GetConnectionString("productDb"),
-		npgsql => npgsql.MigrationsAssembly(typeof(ProductDbContext).Assembly.GetName().Name)
-	);
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("productDb"),
+        npgsql => npgsql.MigrationsAssembly(typeof(ProductDbContext).Assembly.GetName().Name)
+    );
 
-	options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
-		   .EnableDetailedErrors();
+    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+           .EnableDetailedErrors();
 });
 
 builder.Services
@@ -24,12 +24,12 @@ builder.Services
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("customPolicy", builder =>
-	{
-		builder.AllowAnyOrigin()
-			   .AllowAnyHeader()
-			   .AllowAnyMethod();
-	});
+    options.AddPolicy("customPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
@@ -40,8 +40,8 @@ app.UseCors();
 
 using (var scope = app.Services.CreateScope())
 {
-	var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-	db.Database.Migrate(); // Apply any pending EF Core migrations
+    var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+    db.Database.Migrate(); // Apply any pending EF Core migrations
 }
 
 app.Run();

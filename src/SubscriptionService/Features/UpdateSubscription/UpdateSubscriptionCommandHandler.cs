@@ -7,30 +7,30 @@ using SubscriptionService.Entities;
 
 namespace SubscriptionService.Features.UpdateSubscription
 {
-  public sealed class UpdateSubscriptionCommandHandler(SubscriptionDbContext context) : ICommandHandler<UpdateSubscriptionPlanCommand, Guid>
-  {
-    public async Task<Guid> Handle([FromBody] UpdateSubscriptionPlanCommand command, CancellationToken cancellationToken = default)
+    public sealed class UpdateSubscriptionCommandHandler(SubscriptionDbContext context) : ICommandHandler<UpdateSubscriptionPlanCommand, Guid>
     {
-      if (string.IsNullOrWhiteSpace(command.NewPlanName))
-        throw new AppException(AppError.Validation("New plan name cannot be empty."));
+        public async Task<Guid> Handle([FromBody] UpdateSubscriptionPlanCommand command, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(command.NewPlanName))
+                throw new AppException(AppError.Validation("New plan name cannot be empty."));
 
-      var subscription = await context.Set<Subscription>()
-          .FirstOrDefaultAsync(s => s.Id == command.SubscriptionId, cancellationToken);
+            var subscription = await context.Set<Subscription>()
+                .FirstOrDefaultAsync(s => s.Id == command.SubscriptionId, cancellationToken);
 
-      if (subscription is null)
-        throw new AppException(AppError.NotFound("Subscription not found."));
+            if (subscription is null)
+                throw new AppException(AppError.NotFound("Subscription not found."));
 
-      if (!subscription.IsActive)
-        throw new AppException(AppError.Validation("Cannot change plan on an inactive subscription."));
+            if (!subscription.IsActive)
+                throw new AppException(AppError.Validation("Cannot change plan on an inactive subscription."));
 
-      subscription.PlanName = command.NewPlanName;
-      subscription.EndDate = null;
-      subscription.StartDate = DateTime.UtcNow;
+            subscription.PlanName = command.NewPlanName;
+            subscription.EndDate = null;
+            subscription.StartDate = DateTime.UtcNow;
 
-      context.Set<Subscription>().Update(subscription);
-      await context.SaveChangesAsync(cancellationToken);
+            context.Set<Subscription>().Update(subscription);
+            await context.SaveChangesAsync(cancellationToken);
 
-      return subscription.Id;
+            return subscription.Id;
+        }
     }
-  }
 }
