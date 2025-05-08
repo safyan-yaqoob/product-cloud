@@ -2,7 +2,7 @@
 using ProductService.Database;
 using ProductService.Entities;
 using ProductService.Features.GetPlans;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace ProductService.Features.GetProductById
 {

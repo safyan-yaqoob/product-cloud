@@ -1,4 +1,4 @@
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace SubscriptionService.Features.CreateSubscription
 {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 using TenantService.Features.CreateTenant;
 
 namespace TenantService.Features.GetTenantById

@@ -1,48 +1,47 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Hosting;
 using ProductService.Database;
 using ProductService.Extensions;
 
-internal class Program
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+builder.AddNpgsqlDbContext<ProductDbContext>("productDb", null, options =>
 {
-  private static void Main(string[] args)
-  {
-    var builder = WebApplication.CreateBuilder(args);
+	options.UseNpgsql(
+		builder.Configuration.GetConnectionString("productDb"),
+		npgsql => npgsql.MigrationsAssembly(typeof(ProductDbContext).Assembly.GetName().Name)
+	);
 
-    builder.AddServiceDefaults();
+	options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+		   .EnableDetailedErrors();
+});
 
-    builder.AddNpgsqlDbContext<ProductDbContext>("productDb", null, options =>
-    {
-      options.UseNpgsql(
-          builder.Configuration.GetConnectionString("productDb"),
-          npgsql => npgsql.MigrationsAssembly(typeof(ProductDbContext).Assembly.GetName().Name)
-      );
+builder.Services
+  .AddServices(builder.Configuration)
+  .AddOpenApi();
 
-      options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
-             .EnableDetailedErrors();
-    });
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("customPolicy", builder =>
+	{
+		builder.AllowAnyOrigin()
+			   .AllowAnyHeader()
+			   .AllowAnyMethod();
+	});
+});
 
-    builder.Services
-      .AddServices(builder.Configuration)
-      .AddOpenApi();
+var app = builder.Build();
 
-    builder.Services.AddCors(options =>
-    {
-      options.AddPolicy("customPolicy", builder =>
-      {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-      });
-    });
+app.ConfigurePipeline(builder.Configuration);
 
-    var app = builder.Build();
+app.UseCors();
 
-    app.ConfigurePipeline(builder.Configuration);
-
-    app.UseCors();
-
-    app.Run();
-  }
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+	db.Database.Migrate(); // Apply any pending EF Core migrations
 }
+
+app.Run();

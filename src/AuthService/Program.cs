@@ -31,4 +31,10 @@ builder.Services.RegisterServices(builder.Configuration);
 var app = builder.Build();
 
 app.ConfigurePipeline();
+
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+	db.Database.Migrate(); // Apply any pending EF Core migrations
+}
 app.Run();

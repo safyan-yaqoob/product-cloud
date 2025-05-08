@@ -1,4 +1,4 @@
-using Shared.CQRS;
+using SharedKernal.CQRS;
 using System.Text.RegularExpressions;
 using TenantService.Database;
 using TenantService.Entities;

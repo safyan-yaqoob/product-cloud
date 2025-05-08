@@ -1,7 +1,7 @@
 using ProductService.Database;
 using ProductService.Entities;
-using Shared.Common;
-using Shared.CQRS;
+using SharedKernal.Common;
+using SharedKernal.CQRS;
 
 namespace ProductService.Features.CreateProduct
 {

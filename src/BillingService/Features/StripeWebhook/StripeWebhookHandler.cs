@@ -1,11 +1,11 @@
 using BillingService.Common;
 using BillingService.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 using Stripe;
 using BillingService.Database;
 using Stripe.Checkout;
-using Shared.Common;
+using SharedKernal.Common;
 
 namespace BillingService.Features.StripeWebhook
 {

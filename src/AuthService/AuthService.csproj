@@ -4,6 +4,9 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>9b356824-f5bf-4805-9d01-d610375231a5</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -25,6 +28,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
 		<PackageReference Include="Npgsql" Version="9.0.3" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
@@ -38,7 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj" />
-	  <ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj" />
+		<ProjectReference Include="..\SharedKernal\SharedKernal.csproj" />
 	</ItemGroup>
 </Project>

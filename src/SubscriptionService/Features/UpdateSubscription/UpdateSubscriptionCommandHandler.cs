@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.CQRS;
+using SharedKernal.Common;
+using SharedKernal.CQRS;
 using SubscriptionService.Database;
 using SubscriptionService.Entities;
 

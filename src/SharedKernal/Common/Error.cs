@@ -1,4 +1,4 @@
-namespace Shared.Common
+namespace SharedKernal.Common
 {
   public class AppError(string code, string message)
   {

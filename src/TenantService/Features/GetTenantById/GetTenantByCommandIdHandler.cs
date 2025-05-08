@@ -1,33 +1,46 @@
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.CQRS;
+using SharedKernal.Caching;
+using SharedKernal.Common;
+using SharedKernal.CQRS;
 using TenantService.Database;
 using TenantService.Entities;
 
 namespace TenantService.Features.GetTenantById
 {
-	public class GetTenantByCommandIdHandler(TenantDbContext context) : ICommandHandler<GetTenantByIdCommand, GetTenantByIdResponse>
+	public class GetTenantByCommandIdHandler(TenantDbContext context, IAppCache appCache) : ICommandHandler<GetTenantByIdCommand, GetTenantByIdResponse>
 	{
 		public async Task<GetTenantByIdResponse> Handle(GetTenantByIdCommand command, CancellationToken cancellationToken = default)
 		{
-			var tenant = await context.Set<Tenant>().FirstOrDefaultAsync(e => e.Id == command.TenantId);
-
-			if (tenant == null)
+			var cacheKey = $"GetTenantById-{command.TenantId}";
+			var cachedTenant = await appCache.GetAsync<GetTenantByIdResponse>(cacheKey);
+			if (cachedTenant == null)
 			{
-				throw new AppException(AppError.Validation(@$"Cannot found tenant with specified id {command.TenantId}"));
+
+				cachedTenant = await context.Set<Tenant>()
+					.Where(t => t.Id == command.TenantId)
+					.Select(t => new GetTenantByIdResponse
+					{
+						Id = t.Id,
+						Name = t.Name,
+						Orgnization = t.Orgnization,
+						ContactEmail = t.ContactEmail,
+						PlanType = t.PlanType,
+						Industry = t.Industry,
+						TimeZone = t.TimeZone,
+						Logo = t.Logo,
+						CreatedAt = t.CreatedAt
+					}).FirstOrDefaultAsync(cancellationToken);
+				
+				if (cachedTenant == null)
+				{
+					throw new AppException(AppError.Validation(@$"Cannot found tenant with specified id {command.TenantId}"));
+				}
+
+				await appCache.SetAsync(cacheKey, cachedTenant, TimeSpan.FromMinutes(5));
+				return cachedTenant;
+
 			}
-
-			return new GetTenantByIdResponse
-			{
-				Id = tenant.Id,
-				Name = tenant.Name,
-				ContactEmail = tenant.ContactEmail,
-				CreatedAt = tenant.CreatedAt,
-				PlanType = tenant.PlanType,
-				Orgnization = tenant.Orgnization,
-				Logo = tenant.Logo,
-				Industry = tenant.Industry,
-			};
+			return cachedTenant;
 		}
 	}
 }

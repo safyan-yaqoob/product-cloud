@@ -1,4 +1,4 @@
-namespace Shared.CQRS
+namespace SharedKernal.CQRS
 {
   public interface ICommandHandler<in TCommand, TResult> where TCommand : ICommand<TResult>
   {

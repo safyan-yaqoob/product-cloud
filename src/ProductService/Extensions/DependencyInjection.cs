@@ -1,28 +1,29 @@
-using Microsoft.EntityFrameworkCore;
-using ProductService.Database;
 using ProductService.Middleware;
-using Shared.CQRS;
+using SharedKernal.Infrastructure;
+using SharedKernal.CQRS;
 
 namespace ProductService.Extensions
 {
-  public static class DependencyInjection
-  {
-    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-    {
-      services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
+	public static class DependencyInjection
+	{
+		public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.AddEndpointsApiExplorer();
+			services.AddSwaggerGen();
 
-      services.Scan(selector =>
-      {
-        selector.FromAssemblies(typeof(DependencyInjection).Assembly)
-        .AddClasses(filter => filter.AssignableTo(typeof(ICommandHandler<,>)))
-        .AsImplementedInterfaces()
-        .WithScopedLifetime();
-      });
+			services.AddSharedInfrastructure(configuration);
 
-      services.AddScoped<ExceptionHandlingMiddleware>();
+			services.Scan(selector =>
+			{
+				selector.FromAssemblies(typeof(DependencyInjection).Assembly)
+				  .AddClasses(filter => filter.AssignableTo(typeof(ICommandHandler<,>)))
+				  .AsImplementedInterfaces()
+				  .WithScopedLifetime();
+			});
 
-      return services;
-    }
-  }
+			services.AddScoped<ExceptionHandlingMiddleware>();
+
+			return services;
+		}
+	}
 }

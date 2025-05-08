@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Features.GetProducts;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace ProductService.Features.CreateProduct
 {

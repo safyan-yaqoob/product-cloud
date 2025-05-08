@@ -1,4 +1,4 @@
-namespace Shared.Common
+namespace SharedKernal.Common
 {
   public class AppException : Exception
   {

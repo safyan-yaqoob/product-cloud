@@ -13,7 +13,7 @@ namespace BillingService.Entities
     public BillingStatus Status { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? PaidAt { get; set; }
-    public string? FailureReason { get; set; }
+    public string FailureReason { get; set; }
     public string PaymentIntentId { get; set; } //Strip
     public Guid InvoiceId { get; set; }
     public Invoice Invoice { get; set; }

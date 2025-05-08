@@ -1,4 +1,4 @@
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace BillingService.Features.AddPaymentMethod
 {
@@ -8,7 +8,7 @@ namespace BillingService.Features.AddPaymentMethod
       string CardType,
       string LastFourDigits,
       DateTime ExpiryDate,
-      string? BillingAddress,
+      string BillingAddress,
       bool IsDefault
   ) : ICommand<Guid>;
 }

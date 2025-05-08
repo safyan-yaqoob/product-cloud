@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace BillingService.Features.InitiateBilling
 {
@@ -7,7 +7,7 @@ namespace BillingService.Features.InitiateBilling
   {
     public static RouteGroupBuilder MapInitiateBilling(this RouteGroupBuilder group)
     {
-      group.MapGet("/initiate-payment", async ([FromBody] InitiateBillingCommand command, ICommandHandler<InitiateBillingCommand, string> handler) =>
+      group.MapPost("/initiate-payment", async ([FromBody] InitiateBillingCommand command, ICommandHandler<InitiateBillingCommand, string> handler) =>
       {
         var result = await handler.Handle(command);
         return Results.Ok(result);

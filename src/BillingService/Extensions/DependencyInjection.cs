@@ -1,40 +1,40 @@
 using BillingService.Abstraction;
-using BillingService.External;
 using BillingService.Middleware;
-using Shared.CQRS;
+using SharedKernal.Infrastructure;
+using SharedKernal.CQRS;
 
 namespace BillingService.Extensions
 {
-  public static class DependencyInjection
-  {
-    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-    {
-      services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
+	public static class DependencyInjection
+	{
+		public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.AddEndpointsApiExplorer();
+			services.AddSwaggerGen();
 
-      services.Scan(selector =>
-      {
-        selector.FromAssemblies(typeof(DependencyInjection).Assembly)
-        .AddClasses(filter => filter.AssignableTo(typeof(ICommandHandler<,>)))
-        .AsImplementedInterfaces()
-        .WithScopedLifetime();
-      });
+			services.AddSharedInfrastructure(configuration);
 
-      services.AddScoped<ExceptionHandlingMiddleware>();
+			services.Scan(selector =>
+			{
+				selector.FromAssemblies(typeof(DependencyInjection).Assembly)
+				  .AddClasses(filter => filter.AssignableTo(typeof(ICommandHandler<,>)))
+				  .AsImplementedInterfaces()
+				  .WithScopedLifetime();
+			});
 
-      services.AddHttpClient<TenantServiceClient>(o =>
-      {
-        o.BaseAddress = new Uri("https://tenant-service");
-      });
+			services.AddScoped<ExceptionHandlingMiddleware>();
 
-      services.AddHttpClient<SubscriptionServiceClient>(o =>
-      {
-        o.BaseAddress = new Uri("https://subscription-service");
-      });
+			services.AddScoped<IStripeBillingService, StripeBillingService>();
 
-      services.AddScoped<IStripeBillingService, StripeBillingService>();
+            services.AddGrpcClient<SharedKernal.Protos.SubscriptionGrpc.SubscriptionGrpcClient>(o =>
+            {
+                o.Address = new Uri("https://localhost:7276/");
+            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            });
 
-      return services;
-    }
-  }
+            return services;
+		}
+	}
 }

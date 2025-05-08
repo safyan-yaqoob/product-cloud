@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.CQRS;
+using SharedKernal.Common;
+using SharedKernal.CQRS;
 using TenantService.Database;
 using TenantService.Entities;
 using TenantService.Features.GetTenantById;

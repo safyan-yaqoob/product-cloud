@@ -1,4 +1,4 @@
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace BillingService.Features.UpdatePaymentMethod
 {
@@ -10,7 +10,7 @@ namespace BillingService.Features.UpdatePaymentMethod
     public string CardType { get; set; } = default!;
     public string LastFourDigits { get; set; } = default!;
     public DateTime ExpiryDate { get; set; }
-    public string? BillingAddress { get; set; }
+    public string BillingAddress { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsDefault { get; set; } = false;
   }

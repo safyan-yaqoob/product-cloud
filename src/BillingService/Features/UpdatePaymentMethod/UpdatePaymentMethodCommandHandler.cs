@@ -1,8 +1,8 @@
 using BillingService.Database;
 using BillingService.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.CQRS;
+using SharedKernal.Common;
+using SharedKernal.CQRS;
 namespace BillingService.Features.UpdatePaymentMethod
 {
   public class UpdatePaymentMethodCommandHandler(BillingDbContext context)

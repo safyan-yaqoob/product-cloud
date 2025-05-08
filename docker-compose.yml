@@ -1,0 +1,151 @@
+version: '3.9'
+
+services:
+  api.gateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: api.gateway/Dockerfile
+    depends_on:
+      - product
+      - billing
+      - tenant
+      - subscription
+      - auth
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+
+  product:
+    image: ${DOCKER_REGISTRY-}product
+    build:
+      context: .
+      dockerfile: src/ProductService/Dockerfile
+    depends_on:
+      - productDb
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__productDb=Host=productDb;Port=5432;Username=postgres;Password=admin;Database=productDb
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5001:80"
+
+  billing:
+    image: ${DOCKER_REGISTRY-}billing
+    build:
+      context: .
+      dockerfile: src/BillingService/Dockerfile
+    depends_on:
+      - billingDb
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__billingDb=Host=billingDb;Port=5432;Username=postgres;Password=admin;Database=billingDb
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5002:80"
+
+  tenant:
+    image: ${DOCKER_REGISTRY-}tenant
+    build:
+      context: .
+      dockerfile: src/TenantService/Dockerfile
+    depends_on:
+      - tenantDb
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__tenantDb=Host=tenantDb;Port=5432;Username=postgres;Password=admin;Database=tenantDb
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5003:80"
+
+  subscription:
+    image: ${DOCKER_REGISTRY-}subscription
+    build:
+      context: .
+      dockerfile: src/SubscriptionService/Dockerfile
+    depends_on:
+      - subscriptionDb
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__subscriptionDb=Host=subscriptionDb;Port=5432;Username=postgres;Password=admin;Database=subscriptiondb
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5004:80"
+
+  auth:
+    image: ${DOCKER_REGISTRY-}auth
+    build:
+      context: .
+      dockerfile: src/AuthService/Dockerfile
+    depends_on:
+      - authDb
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__authDb=Host=authDb;Port=5432;Username=postgres;Password=admin;Database=authDb
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5005:80"
+
+  productDb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: productdb
+    volumes:
+      - product-data:/var/lib/postgresql/data
+
+  billingDb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: billingdb
+    volumes:
+      - billing-data:/var/lib/postgresql/data
+
+  tenantDb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: tenantDb
+    volumes:
+      - tenant-data:/var/lib/postgresql/data
+
+  subscriptionDb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: subscriptiondb
+    volumes:
+      - subscription-data:/var/lib/postgresql/data
+
+  authDb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: authDb
+    volumes:
+      - auth-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+
+volumes:
+  product-data:
+  billing-data:
+  tenant-data:
+  subscription-data:
+  auth-data:
+  redis-data:

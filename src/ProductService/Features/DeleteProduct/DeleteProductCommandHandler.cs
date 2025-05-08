@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
 using ProductService.Entities;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace ProductService.Features.DeleteProduct
 {

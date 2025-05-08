@@ -38,4 +38,10 @@ app.ConfigurePipeline(builder.Configuration);
 
 app.UseCors();
 
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<BillingDbContext>();
+	db.Database.Migrate(); // Apply any pending EF Core migrations
+}
+
 app.Run();

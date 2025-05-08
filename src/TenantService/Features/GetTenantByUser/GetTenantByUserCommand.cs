@@ -1,4 +1,4 @@
-﻿using Shared.CQRS;
+﻿using SharedKernal.CQRS;
 using TenantService.Features.GetTenantById;
 
 namespace TenantService.Features.GetTenantByUser

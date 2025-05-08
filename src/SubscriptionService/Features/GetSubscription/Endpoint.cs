@@ -1,22 +1,22 @@
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace SubscriptionService.Features.GetSubscription
 {
-  public static class GetSubscriptionEndpoint
-  {
-    public static RouteGroupBuilder MapGetSubscription(this RouteGroupBuilder group)
+    public static class GetSubscriptionEndpoint
     {
-      group.MapGet("/{id}", async (Guid id, ICommandHandler<GetSubscriptionCommand, GetSubscriptionCommandResponse> handler) =>
-      {
-        var subscription = await handler.Handle(new GetSubscriptionCommand(id));
+        public static RouteGroupBuilder MapGetSubscription(this RouteGroupBuilder group)
+        {
+            group.MapGet("/{id}", async (Guid id, ICommandHandler<GetSubscriptionCommand, GetSubscriptionCommandResponse> handler) =>
+            {
+                var subscription = await handler.Handle(new GetSubscriptionCommand(id));
 
-        if (subscription == null)
-          return Results.NotFound();
+                if (subscription == null)
+                    return Results.NotFound();
 
-        return Results.Ok(subscription);
-      });
+                return Results.Ok(subscription);
+            });
 
-      return group;
+            return group;
+        }
     }
-  }
 }

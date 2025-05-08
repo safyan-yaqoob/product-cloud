@@ -1,13 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var postgres = builder.AddPostgres("postgres")
-	.WithPgAdmin()
+var redis = builder.AddRedis("redis")
 	.WithLifetime(ContainerLifetime.Persistent);
 
-if (builder.ExecutionContext.IsRunMode)
-{
-	postgres.WithDataVolume();
-}
+var postgres = builder.AddPostgres("postgres")
+	.WithPgAdmin()
+	.WithDataVolume()
+	.WithLifetime(ContainerLifetime.Persistent);
 
 var tenantDb = postgres.AddDatabase("tenantDb");
 var billingDb = postgres.AddDatabase("billingDb");
@@ -15,43 +14,34 @@ var subscriptionDb = postgres.AddDatabase("subscriptionDb");
 var productDb = postgres.AddDatabase("productDb");
 var authDb = postgres.AddDatabase("authDb");
 
-var dbManager = builder.AddProject("dbmanager", "../../src/DbManager/DbManager.csproj")
-	.WithReference(tenantDb)
-	.WaitFor(tenantDb)
-	.WithReference(billingDb)
-	.WaitFor(billingDb)
-	.WithReference(subscriptionDb)
-	.WaitFor(subscriptionDb)
-	.WithReference(productDb)
-	.WaitFor(productDb)
-	.WithReference(authDb)
-	.WaitFor(authDb)
-	.WithHttpHealthCheck("/health")
-	.WithHttpCommand("/reset-db", "Reset Database", commandOptions: new() { IconName = "DatabaseLightning" });
-
 var tenantService = builder.AddProject("tenant-service", "../../src/TenantService/TenantService.csproj")
 	.WithReference(tenantDb)
-	.WaitFor(dbManager);
+	.WithReference(redis)
+	.WaitFor(tenantDb);
 
 var billingService = builder.AddProject("billing-service", "../../src/BillingService/BillingService.csproj")
-	.WithHttpEndpoint(name: "billing-http", port: 5002)
+	//.WithHttpEndpoint(name: "billing-http", port: 5002)
 	.WithReference(billingDb)
-	.WaitFor(dbManager);
+	.WithReference(redis)
+	.WaitFor(billingDb);
 
 var subscriptionService = builder.AddProject("subscription-service", "../../src/SubscriptionService/SubscriptionService.csproj")
-	.WithHttpEndpoint(name: "subscription-http", port: 5003)
+	//.WithHttpEndpoint(name: "subscription-http", port: 5003)
 	.WithReference(subscriptionDb)
-	.WaitFor(dbManager);
+	.WithReference(redis)
+	.WaitFor(subscriptionDb);
 
 var productService = builder.AddProject("product-service", "../../src/ProductService/ProductService.csproj")
-	.WithHttpEndpoint(name: "product-http", port: 5004)
+	//.WithHttpEndpoint(name: "product-http", port: 5004)
 	.WithReference(productDb)
-	.WaitFor(dbManager);
+	.WithReference(redis)
+	.WaitFor(productDb);
 
 var authService = builder.AddProject("auth-service", "../../src/AuthService/AuthService.csproj")
-	.WithHttpEndpoint(name: "auth-http", port: 5005)
+	//.WithHttpEndpoint(name: "auth-http", port: 5005)
 	.WithReference(authDb)
-	.WaitFor(dbManager);
+	.WithReference(redis)
+	.WaitFor(authDb);
 
 var gateway = builder.AddProject("api-gateway", "../../api.gateway/api.gateway.csproj")
 	.WithReference(tenantService)
@@ -59,5 +49,6 @@ var gateway = builder.AddProject("api-gateway", "../../api.gateway/api.gateway.c
 	.WithReference(subscriptionService)
 	.WithReference(productService)
 	.WithReference(authService);
+
 
 builder.Build().Run();

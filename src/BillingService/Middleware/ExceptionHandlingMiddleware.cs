@@ -1,4 +1,4 @@
-using Shared.Common;
+using SharedKernal.Common;
 
 namespace BillingService.Middleware
 {

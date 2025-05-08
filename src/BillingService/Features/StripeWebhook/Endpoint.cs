@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace BillingService.Features.StripeWebhook
 {

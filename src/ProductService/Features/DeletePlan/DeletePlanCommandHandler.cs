@@ -2,7 +2,7 @@
 using ProductService.Database;
 using ProductService.Entities;
 using ProductService.Features.GetPlan;
-using Shared.CQRS;
+using SharedKernal.CQRS;
 
 namespace ProductService.Features.DeletePlan
 {
