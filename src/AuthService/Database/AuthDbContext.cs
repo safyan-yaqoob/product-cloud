@@ -1,18 +1,13 @@
 using Humanizer;
+using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using IdentityServer.Models;
 
-namespace IdentityServer.Data
+namespace AuthService.Database
 {
-    public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class AuthDbContext(DbContextOptions options) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
     {
-        public AuthDbContext(DbContextOptions options) : base(options)
-        {
-
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

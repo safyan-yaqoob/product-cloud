@@ -14,13 +14,14 @@ namespace SharedKernal.Messaging
         {
             using var scope = serviceProvider.CreateScope();
             var handlers = scope.ServiceProvider.GetServices<object>()
-                .Where(e => e.GetType().GetInterfaces().Any(e => e.IsGenericType && e.GetGenericTypeDefinition() == typeof(IMessageHandler<>)));
+                .Where(e => e.GetType().GetInterfaces().Any(e =>
+                    e.IsGenericType && e.GetGenericTypeDefinition() == typeof(IMessageHandler<>)));
 
             foreach (var handler in handlers)
             {
                 var messageType = handler.GetType().GetInterfaces()
                     .First(i => i.IsGenericType &&
-                               i.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
+                                i.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
                     .GetGenericArguments()[0];
 
 

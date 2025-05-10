@@ -1,6 +1,7 @@
 using SubscriptionService.Middleware;
 using SharedKernal.Infrastructure;
 using SharedKernal.CQRS;
+using SubscriptionService.Database;
 
 namespace SubscriptionService.Extensions
 {
@@ -12,6 +13,7 @@ namespace SubscriptionService.Extensions
 			services.AddSwaggerGen();
 
 			services.AddSharedInfrastructure(configuration);
+			services.AddMessageBroker<SubscriptionDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
 
 			services.Scan(selector =>
 			{

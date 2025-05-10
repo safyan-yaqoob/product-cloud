@@ -2,6 +2,7 @@ using TenantService.Features.CreateTenant;
 using TenantService.Features.GetAllTenants;
 using TenantService.Features.GetTenantById;
 using TenantService.Features.GetTenantByUser;
+using TenantService.Features.UpdateTenant;
 using TenantService.Middleware;
 
 namespace TenantService.Extensions
@@ -20,10 +21,13 @@ namespace TenantService.Extensions
 			app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 			app.MapGroup("/api/tenants")
-			   .MapCreateTenant()
-			   .MapGetTenantById()
-			   .MapGetAllTenant()
-			   .MapGetTenantByUser();
+				.RequireRateLimiting("TenantApi")
+				.RequireAuthorization()
+				.MapCreateTenant()
+				.MapGetTenantById()
+				.MapGetAllTenant()
+				.MapGetTenantByUser()
+				.MapUpdateTenant();
 
 			return app;
 		}

@@ -4,19 +4,19 @@ using SharedKernal.CQRS;
 using SubscriptionService.Database;
 using SubscriptionService.Entities;
 
-namespace SubscriptionService.Features.GetSubscription
+namespace SubscriptionService.Features.GetSubscriptionsByTenant
 {
-    public sealed class GetSubscriptionCommandHandler(SubscriptionDbContext context) : ICommandHandler<GetSubscriptionCommand, GetSubscriptionCommandResponse>
+    public sealed class GetSubscriptionCommandHandler(SubscriptionDbContext context) : ICommandHandler<GetSubscriptionsCommand, GetSubscriptionsCommandResponse>
     {
-        public async Task<GetSubscriptionCommandResponse> Handle(GetSubscriptionCommand command, CancellationToken cancellationToken = default)
+        public async Task<GetSubscriptionsCommandResponse> Handle(GetSubscriptionsCommand command, CancellationToken cancellationToken = default)
         {
             var subscription = await context.Set<Subscription>()
-                  .FirstOrDefaultAsync(s => s.Id == command.SubscriptionId, cancellationToken);
+                  .FirstOrDefaultAsync(s => s.TenantId == command.TenantId, cancellationToken);
 
             if (subscription is null)
                 throw new AppException(AppError.NotFound("Subscription not found."));
 
-            return new GetSubscriptionCommandResponse
+            return new GetSubscriptionsCommandResponse
             {
                 Id = subscription.Id,
                 TenantId = subscription.TenantId,

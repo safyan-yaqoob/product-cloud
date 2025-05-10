@@ -1,27 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Client.AspNetCore;
-using static OpenIddict.Abstractions.OpenIddictConstants;
-using System.Security.Claims;
-using OpenIddict.Abstractions;
+﻿using System.Security.Claims;
+using IdentityServer.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using IdentityServer.Models;
-using Polly;
+using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Abstractions;
+using OpenIddict.Client.AspNetCore;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace IdentityServer.Controllers
+namespace AuthService.Controllers
 {
     [ApiController]
-    public class ExternalCallbackController : Controller
+    public class ExternalCallbackController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager)
+        : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        public ExternalCallbackController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
         [HttpPost("~/signin-google"), HttpGet("~/signin-google"), IgnoreAntiforgeryToken]
         public async Task<ActionResult> LogInCallback(string returnUrl = null)
         {
@@ -48,13 +42,13 @@ namespace IdentityServer.Controllers
                 throw new InvalidOperationException("Email claim not found.");
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 user = CreateUser();
                 user.Email = email;
                 user.UserName = email;
-                var userCreateResult = await _userManager.CreateAsync(user);
+                var userCreateResult = await userManager.CreateAsync(user);
                 if (!userCreateResult.Succeeded)
                 {
                     throw new InvalidOperationException($"Failed to create user: {string.Join(", ", userCreateResult.Errors.Select(error => error.Description))}");
@@ -79,7 +73,7 @@ namespace IdentityServer.Controllers
 
             properties.StoreTokens(tokensToStore);
 
-            await _signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
+            await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
 
             return SignIn(new ClaimsPrincipal(identity), properties, CookieAuthenticationDefaults.AuthenticationScheme);
         }

@@ -2,9 +2,11 @@ using ProductService.Features.CreatePlan;
 using ProductService.Features.CreateProduct;
 using ProductService.Features.DeletePlan;
 using ProductService.Features.DeleteProduct;
+using ProductService.Features.GetPlanFeatures;
 using ProductService.Features.GetPlans;
 using ProductService.Features.GetProductById;
 using ProductService.Features.GetProducts;
+using ProductService.Features.UpdateProduct;
 using ProductService.Middleware;
 
 namespace ProductService.Extensions
@@ -27,12 +29,14 @@ namespace ProductService.Extensions
 			   .MapCreateProductEndpoint()
 			   .MapGetProductsEndpoint()
 			   .MapGetProductByIdEndpoint()
-			   .MapDeleteProductEndpoint();
+			   .MapDeleteProductEndpoint()
+			   .MapUpdateProductEndpoint();
 
 			app.MapGroup("/api/plans")
 			   .MapCreatePlanEndpoint()
 			   .MapGetPlansEndpoint()
-			   .MapDeletePlanEndpoint();
+			   .MapDeletePlanEndpoint()
+			   .MapGetPlanFeaturesEndpoint();
 
 			return app;
 		}

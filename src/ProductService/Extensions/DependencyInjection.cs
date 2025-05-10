@@ -1,3 +1,4 @@
+using ProductService.Database;
 using ProductService.Middleware;
 using SharedKernal.Infrastructure;
 using SharedKernal.CQRS;
@@ -12,6 +13,7 @@ namespace ProductService.Extensions
 			services.AddSwaggerGen();
 
 			services.AddSharedInfrastructure(configuration);
+			services.AddMessageBroker<ProductDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
 
 			services.Scan(selector =>
 			{

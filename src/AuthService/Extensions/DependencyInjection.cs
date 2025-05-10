@@ -1,12 +1,13 @@
+using AuthService.Database;
+using AuthService.Database.Repository;
+using IdentityServer;
+using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using IdentityServer.Data;
-using IdentityServer.Data.Repository;
-using IdentityServer.Models;
-using static OpenIddict.Abstractions.OpenIddictConstants;
 using SharedKernal.Infrastructure;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace IdentityServer.Extensions
+namespace AuthService.Extensions
 {
 	public static class DependencyInjection
 	{

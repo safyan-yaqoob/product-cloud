@@ -1,4 +1,5 @@
 using BillingService.Abstraction;
+using BillingService.Database;
 using BillingService.Middleware;
 using SharedKernal.Infrastructure;
 using SharedKernal.CQRS;
@@ -13,6 +14,7 @@ namespace BillingService.Extensions
 			services.AddSwaggerGen();
 
 			services.AddSharedInfrastructure(configuration);
+			services.AddMessageBroker<BillingDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
 
 			services.Scan(selector =>
 			{

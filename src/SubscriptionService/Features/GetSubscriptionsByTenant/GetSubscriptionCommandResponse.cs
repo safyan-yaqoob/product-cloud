@@ -1,6 +1,6 @@
-namespace SubscriptionService.Features.GetSubscription
+namespace SubscriptionService.Features.GetSubscriptionsByTenant
 {
-    public record GetSubscriptionCommandResponse
+    public record GetSubscriptionsCommandResponse
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }

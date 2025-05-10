@@ -1,21 +1,14 @@
+using IdentityServer.Records;
 using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore.Models;
-using IdentityServer.Records;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace IdentityServer.Data.Repository
+namespace AuthService.Database.Repository
 {
-    public class ClientAppRepository
+    public class ClientAppRepository(
+        IOpenIddictApplicationManager iddictManager,
+        AuthDbContext context)
     {
-        public readonly IOpenIddictApplicationManager _iddictManager;
-        public readonly AuthDbContext _context;
-        public ClientAppRepository(IOpenIddictApplicationManager iddictManager,
-            AuthDbContext context)
-        {
-            _iddictManager = iddictManager;
-            _context = context;
-        }
-
         public async Task CreateClientAsync(ClientRecord client)
         {
             var application = new OpenIddictApplicationDescriptor
@@ -50,13 +43,13 @@ namespace IdentityServer.Data.Repository
                 }
             };
 
-            await _iddictManager.CreateAsync(application);
+            await iddictManager.CreateAsync(application);
         }
 
         public async Task<IEnumerable<ClientsSummaryRecord>> GetClientsAsync()
         {
             var clients = new List<ClientsSummaryRecord>();
-            var result = _iddictManager.ListAsync();
+            var result = iddictManager.ListAsync();
             await foreach (var item in result)
             {
                 var clientApp = (OpenIddictEntityFrameworkCoreApplication)item;
@@ -74,7 +67,7 @@ namespace IdentityServer.Data.Repository
 
         public async Task<EditClientRecord> GetClientAsync(string id)
         {
-            var result = (OpenIddictEntityFrameworkCoreApplication)await _iddictManager.FindByIdAsync(id);
+            var result = (OpenIddictEntityFrameworkCoreApplication)await iddictManager.FindByIdAsync(id);
 
             return new EditClientRecord()
             {
@@ -88,7 +81,7 @@ namespace IdentityServer.Data.Repository
         }
         public async Task UpdateClientAsync(EditClientRecord client)
         {
-            var result = (OpenIddictEntityFrameworkCoreApplication)await _iddictManager.FindByIdAsync(client.Id);
+            var result = (OpenIddictEntityFrameworkCoreApplication)await iddictManager.FindByIdAsync(client.Id);
 
             result.ClientId = client.ClientId;
             result.ClientSecret = client.ClientSecret;
@@ -96,7 +89,7 @@ namespace IdentityServer.Data.Repository
             result.RedirectUris = client.RedirectUri.ToString();
             result.PostLogoutRedirectUris = client.PostLogoutRedirectUris.ToString();
 
-            await _iddictManager.UpdateAsync(result);
+            await iddictManager.UpdateAsync(result);
         }
     }
 }

@@ -1,6 +1,7 @@
 using SubscriptionService.Features.CancelSubscription;
 using SubscriptionService.Features.CreateSubscription;
-using SubscriptionService.Features.GetSubscription;
+using SubscriptionService.Features.GetSubscriptionsByTenant;
+using SubscriptionService.Features.ReactivateSubscription;
 using SubscriptionService.Features.UpdateSubscription;
 using SubscriptionService.Grpc;
 using SubscriptionService.Middleware;
@@ -23,9 +24,10 @@ namespace SubscriptionService.Extensions
 
             app.MapGroup("/subscription")
               .MapCreateSubscription()
-              .MapGetSubscription()
+              .MapGetSubscriptionsByTenant()
               .MapUpdateSubscriptionPlan()
-              .MapCancelSubscription();
+              .MapCancelSubscription()
+              .MapReactivateSubscription();
 
             app.MapGrpcService<SubscriptionGrpc>();
 

@@ -1,4 +1,5 @@
-using IdentityServer.Data;
+using AuthService.Database;
+using AuthService.Extensions;
 using IdentityServer.Extensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;

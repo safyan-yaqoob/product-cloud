@@ -1,10 +1,10 @@
 using BillingService.Common;
 
-namespace BillingService.Features.Invoices
+namespace BillingService.Features.GetInvoicesByTenant
 {
-  public record GetInvoiceResponse
+  public record GetInvoicesResponse
   {
-    public Guid Id { get; set; } = new Guid();
+    public Guid Id { get; set; }
     public Guid TenantId { get; set; }
     public Guid BillingTransactionId { get; set; }
     public decimal Amount { get; set; }

@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.Configuration;
 using SharedKernal.Messaging.Abstractions;
 
 namespace SharedKernal.Messaging

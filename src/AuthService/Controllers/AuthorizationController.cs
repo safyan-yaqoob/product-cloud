@@ -1,63 +1,52 @@
 ﻿using System.Collections.Immutable;
-using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using IdentityServer;
+using IdentityServer.Models;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using IdentityServer.Models;
 
-namespace IdentityServer.Controllers
+namespace AuthService.Controllers
 {
     [ApiController]
-    public class AuthorizationController : Controller
+    public class AuthorizationController(
+	    IOpenIddictApplicationManager applicationManager,
+	    IOpenIddictScopeManager scopeManager,
+	    AuthorizationService authService,
+	    IOpenIddictAuthorizationManager authorizationManager,
+	    UserManager<ApplicationUser> userManager) : Controller
     {
-        private readonly IOpenIddictApplicationManager _applicationManager;
-        private readonly IOpenIddictScopeManager _scopeManager;
-        private readonly AuthorizationService _authService;
-        private readonly IOpenIddictAuthorizationManager _authorizationManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public AuthorizationController(
-            IOpenIddictApplicationManager applicationManager,
-            IOpenIddictScopeManager scopeManager,
-            AuthorizationService authService,
-            IOpenIddictAuthorizationManager authorizationManager,
-            UserManager<ApplicationUser> userManager)
-        {
-            _applicationManager = applicationManager;
-            _scopeManager = scopeManager;
-            _authService = authService;
-            _authorizationManager = authorizationManager;
-            _userManager = userManager;
-        }
+	    private readonly IOpenIddictAuthorizationManager _authorizationManager = authorizationManager;
 
-        [HttpGet("~/connect/authorize")]
+	    [HttpGet("~/connect/authorize")]
         [HttpPost("~/connect/authorize")]
         public async Task<IActionResult> Authorize()
         {
             var request = HttpContext.GetOpenIddictServerRequest() ??
                           throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
 
-            var parameters = _authService.ParseOAuthParameters(HttpContext, new List<string> { Parameters.Prompt });
+            var parameters = authService.ParseOAuthParameters(HttpContext, new List<string> { Parameters.Prompt });
 
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (!_authService.IsAuthenticated(result, request))
+            if (!authService.IsAuthenticated(result, request))
             {
                 return Challenge(properties: new AuthenticationProperties
                 {
-                    RedirectUri = _authService.BuildRedirectUrl(HttpContext.Request, parameters)
+                    RedirectUri = authService.BuildRedirectUrl(HttpContext.Request, parameters)
                 }, new[] { CookieAuthenticationDefaults.AuthenticationScheme });
             }
 
-            var application = await _applicationManager.FindByClientIdAsync(request.ClientId) ??
+            var application = await applicationManager.FindByClientIdAsync(request.ClientId!) ??
                               throw new InvalidOperationException("Details concerning the calling client application cannot be found.");
 
-            var userId = result.Principal.FindFirst(ClaimTypes.Email)!.Value;
+            var userId = result.Principal!.FindFirst(ClaimTypes.Email)!.Value;
 
             var identity = new ClaimsIdentity(
                 authenticationType: TokenValidationParameters.DefaultAuthenticationType,
@@ -70,7 +59,7 @@ namespace IdentityServer.Controllers
                 .SetClaims(Claims.Role, new List<string> { "user", "admin" }.ToImmutableArray());
 
             identity.SetScopes(request.GetScopes());
-            identity.SetResources(await _scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
+            identity.SetResources(await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
 
             identity.SetDestinations(c => AuthorizationService.GetDestinations(identity, c));
 
@@ -103,7 +92,7 @@ namespace IdentityServer.Controllers
 					}));
 			}
 
-			var user = await _userManager.FindByEmailAsync(email);
+			var user = await userManager.FindByEmailAsync(email);
 
 			var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType, Claims.Name, Claims.Role);
 
@@ -129,7 +118,7 @@ namespace IdentityServer.Controllers
 			identity.AddClaim(roleClaim);
 
 			identity.SetScopes(request.GetScopes());
-			identity.SetResources(await _scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
+			identity.SetResources(await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
 
 			return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 		}

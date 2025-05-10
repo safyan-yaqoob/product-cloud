@@ -1,52 +1,54 @@
 ﻿using System.Reflection;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SharedKernal.Messaging;
 using SharedKernal.Messaging.Abstractions;
 
 namespace SharedKernal.Infrastructure
 {
     public static class MessagingExtensions
     {
-        public static IServiceCollection AddMessageBroker(this IServiceCollection services, IConfiguration configuration, Assembly handlerAssembly = null)
+        public static IServiceCollection AddMessageBroker<TDbContext>(this IServiceCollection services, 
+            IConfiguration configuration, Assembly[]? handlerAssemblies = null) where TDbContext : DbContext
         {
 
             services.Configure<BrokerOptions>(configuration);
 
-            services.AddSingleton<IMessageBus>(sp =>
+            services.AddMassTransit(mt =>
             {
-                var options = sp.GetRequiredService<IOptions<BrokerOptions>>().Value;
-                return new RabbitMessageBus(options, sp);
+                if (handlerAssemblies != null)
+                {
+                    mt.AddConsumers(handlerAssemblies);
+                }
+                
+                mt.AddEntityFrameworkOutbox<TDbContext>(o =>
+                {
+                    o.UseBusOutbox();
+                    o.UsePostgres();
+                    o.QueryDelay = TimeSpan.FromSeconds(10);
+                });
+
+                mt.UsingRabbitMq((ctx, cfg) =>
+                {
+                    var options = ctx.GetRequiredService<IOptions<BrokerOptions>>().Value;
+                    cfg.Host(options.Host, h =>
+                    {
+                        h.Username(options.Username);
+                        h.Password(options.Password);
+                    });
+                    
+                    cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
+                        includeNamespace: false, 
+                        prefix: typeof(TDbContext).Name.Replace("DbContext", "")
+                    ));
+                    
+                    cfg.UseMessageRetry(r => r.Interval(options.RetryCount, options.RetryCount));
+                });
             });
 
-            if (handlerAssembly != null)
-            {
-                services.Scan(cf =>
-                {
-                    cf.FromAssemblies(handlerAssembly);
-                });
-                services.RegisterMessageHandlers(handlerAssembly);
-            }
-
-            services.AddHostedService<MessageBusBackgroundService>();
-
             return services;
-        }
-
-        private static void RegisterMessageHandlers(this IServiceCollection services, Assembly assembly = null)
-        {
-            var handlerTypes = assembly.GetTypes()
-                .Where(i => i.GetInterfaces()
-                    .Any(x => x.IsGenericType && 
-                    x.GetGenericTypeDefinition() == typeof(IMessageHandler<>)));
-
-
-            foreach (var item in handlerTypes)
-            {
-                var serviceType = item.GetInterfaces().First(e => e.IsGenericType && e.GetGenericTypeDefinition() == typeof(IMessageHandler<>));
-                services.AddTransient(serviceType, item);
-            }
         }
     }
 }

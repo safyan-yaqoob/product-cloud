@@ -1,5 +1,5 @@
+using AuthService.Database.Repository;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using IdentityServer.Data.Repository;
 using IdentityServer.Records;
 
 namespace IdentityServer.Pages.Scopes

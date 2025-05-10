@@ -1,8 +1,9 @@
 using BillingService.Features.AddPaymentMethod;
 using BillingService.Features.GetBillingByTenant;
+using BillingService.Features.GetInvoicesByTenant;
 using BillingService.Features.GetTenantPaymentMethods;
 using BillingService.Features.InitiateBilling;
-using BillingService.Features.Invoices;
+using BillingService.Features.RefundSubscriptionPayment;
 using BillingService.Features.StripeWebhook;
 using BillingService.Features.UpdatePaymentMethod;
 using BillingService.Middleware;
@@ -25,12 +26,13 @@ namespace BillingService.Extensions
 
       app.MapGroup("/billing")
         .MapGetBillingById()
-        .MapGetInvoiceById()
+        .MapGetInvoicesByTenant()
         .MapAddPaymentMethod()
         .MapUpdatePaymentMethod()
         .MapStripeWebhook()
         .MapInitiateBilling()
-        .MapGetTenantPaymentMethods();
+        .MapGetTenantPaymentMethods()
+        .MapRefundSubscriptionPayment();
 
       return app;
     }

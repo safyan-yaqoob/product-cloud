@@ -1,16 +1,12 @@
-﻿using OpenIddict.Abstractions;
+﻿using IdentityServer.Records;
+using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore.Models;
-using IdentityServer.Records;
 
-namespace IdentityServer.Data.Repository
+namespace AuthService.Database.Repository
 {
-    public class ScopesRepository
+    public class ScopesRepository(IOpenIddictScopeManager scopesManager)
     {
-        public readonly IOpenIddictScopeManager _scopesManager;
-        public ScopesRepository(IOpenIddictScopeManager scopesManager)
-        {
-            _scopesManager = scopesManager;
-        }
+        public readonly IOpenIddictScopeManager _scopesManager = scopesManager;
 
         public async Task AddScopeAsync(ScopeRecord scope)
         {
