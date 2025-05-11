@@ -24,7 +24,13 @@ namespace SubscriptionService.Extensions
 			});
 
 			services.AddScoped<ExceptionHandlingMiddleware>();
-            services.AddGrpc();
+            services.AddGrpcClient<SharedKernal.Protos.PlanGrpc.PlanGrpcClient>(o =>
+            {
+                o.Address = new Uri("https://localhost:7182/");
+            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            });
 
             return services;
 		}

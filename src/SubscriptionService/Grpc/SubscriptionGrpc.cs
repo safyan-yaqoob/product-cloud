@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using SharedKernal.Common;
 using SharedKernal.Protos;

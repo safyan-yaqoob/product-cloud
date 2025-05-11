@@ -5,39 +5,39 @@ using System.Reflection;
 
 namespace SubscriptionService.Database
 {
-  public class SubscriptionDbContext(DbContextOptions<SubscriptionDbContext> options) : DbContext(options)
-  {
-    protected override void OnModelCreating(ModelBuilder builder)
+    public class SubscriptionDbContext(DbContextOptions<SubscriptionDbContext> options) : DbContext(options)
     {
-      base.OnModelCreating(builder);
-
-      builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-      // If we will use PostgreSql db then below in the name convention code
-      // how it create the db table name and table properties name.
-      foreach (var entity in builder.Model.GetEntityTypes())
-      {
-        // Replace table names
-        entity.SetTableName(entity.GetTableName()?.Underscore());
-
-        var ecommerceObjectIdentifier = StoreObjectIdentifier.Table(entity.GetTableName()?.Underscore()!, entity.GetSchema());
-
-        // Replace column names
-        foreach (var property in entity.GetProperties())
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-          property.SetColumnName(property.GetColumnName(ecommerceObjectIdentifier)?.Underscore());
-        }
+            base.OnModelCreating(builder);
 
-        foreach (var key in entity.GetKeys())
-        {
-          key.SetName(key.GetName()?.Underscore());
-        }
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        foreach (var key in entity.GetForeignKeys())
-        {
-          key.SetConstraintName(key.GetConstraintName()?.Underscore());
+            // If we will use PostgreSql db then below in the name convention code
+            // how it create the db table name and table properties name.
+            foreach (var entity in builder.Model.GetEntityTypes())
+            {
+                // Replace table names
+                entity.SetTableName(entity.GetTableName()?.Underscore());
+
+                var ecommerceObjectIdentifier = StoreObjectIdentifier.Table(entity.GetTableName()?.Underscore()!, entity.GetSchema());
+
+                // Replace column names
+                foreach (var property in entity.GetProperties())
+                {
+                    property.SetColumnName(property.GetColumnName(ecommerceObjectIdentifier)?.Underscore());
+                }
+
+                foreach (var key in entity.GetKeys())
+                {
+                    key.SetName(key.GetName()?.Underscore());
+                }
+
+                foreach (var key in entity.GetForeignKeys())
+                {
+                    key.SetConstraintName(key.GetConstraintName()?.Underscore());
+                }
+            }
         }
-      }
     }
-  }
 }

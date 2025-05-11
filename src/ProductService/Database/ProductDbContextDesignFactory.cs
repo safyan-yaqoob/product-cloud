@@ -17,7 +17,7 @@ namespace ProductService.Database
 
       var configuration = builder.Build();
 
-      var connectionStringSectionValue = configuration.GetConnectionString("DefaultConnection");
+      var connectionStringSectionValue = configuration.GetConnectionString("productDb");
 
       if (string.IsNullOrWhiteSpace(connectionStringSectionValue))
       {

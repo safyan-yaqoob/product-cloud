@@ -35,11 +35,5 @@
 		<ProjectReference Include="..\..\aspire\ServiceDefaults\ServiceDefaults.csproj" />
 		<ProjectReference Include="..\SharedKernal\SharedKernal.csproj" />
 	</ItemGroup>
-	
-	<ItemGroup>
-	  <Protobuf Include="..\SharedKernal\Protos\subscription.proto" GrpcServices="Client">
-	    <Link>Protos\subscription.proto</Link>
-	  </Protobuf>
-	</ItemGroup>
 
 </Project>

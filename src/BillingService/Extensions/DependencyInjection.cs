@@ -3,6 +3,8 @@ using BillingService.Database;
 using BillingService.Middleware;
 using SharedKernal.Infrastructure;
 using SharedKernal.CQRS;
+using MassTransit;
+using BillingService.Consumers;
 
 namespace BillingService.Extensions
 {
@@ -15,6 +17,10 @@ namespace BillingService.Extensions
 
 			services.AddSharedInfrastructure(configuration);
 			services.AddMessageBroker<BillingDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
+			services.AddMassTransit(ctg =>
+			{
+				ctg.AddConsumer<SubscriptionCreatedConsumer>();
+			});
 
 			services.Scan(selector =>
 			{
@@ -25,17 +31,7 @@ namespace BillingService.Extensions
 			});
 
 			services.AddScoped<ExceptionHandlingMiddleware>();
-
 			services.AddScoped<IStripeBillingService, StripeBillingService>();
-
-            services.AddGrpcClient<SharedKernal.Protos.SubscriptionGrpc.SubscriptionGrpcClient>(o =>
-            {
-                o.Address = new Uri("https://localhost:7276/");
-            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            });
-
             return services;
 		}
 	}

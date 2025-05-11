@@ -14,7 +14,7 @@ namespace SharedKernal.Infrastructure
             IConfiguration configuration, Assembly[]? handlerAssemblies = null) where TDbContext : DbContext
         {
 
-            services.Configure<BrokerOptions>(configuration);
+            services.Configure<BrokerOptions>(configuration.GetSection("MessageBroker"));
 
             services.AddMassTransit(mt =>
             {
@@ -23,27 +23,23 @@ namespace SharedKernal.Infrastructure
                     mt.AddConsumers(handlerAssemblies);
                 }
                 
-                mt.AddEntityFrameworkOutbox<TDbContext>(o =>
-                {
-                    o.UseBusOutbox();
-                    o.UsePostgres();
-                    o.QueryDelay = TimeSpan.FromSeconds(10);
-                });
+                //mt.AddEntityFrameworkOutbox<TDbContext>(o =>
+                //{
+                //    o.UseBusOutbox();
+                //    o.UsePostgres();
+                //    o.QueryDelay = TimeSpan.FromSeconds(10);
+                //});
 
                 mt.UsingRabbitMq((ctx, cfg) =>
                 {
                     var options = ctx.GetRequiredService<IOptions<BrokerOptions>>().Value;
-                    cfg.Host(options.Host, h =>
-                    {
-                        h.Username(options.Username);
-                        h.Password(options.Password);
-                    });
-                    
+                    cfg.Host(new Uri(options.Host));
+
                     cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
-                        includeNamespace: false, 
+                        includeNamespace: false,
                         prefix: typeof(TDbContext).Name.Replace("DbContext", "")
                     ));
-                    
+
                     cfg.UseMessageRetry(r => r.Interval(options.RetryCount, options.RetryCount));
                 });
             });

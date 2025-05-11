@@ -25,6 +25,8 @@ namespace ProductService.Extensions
 
 			services.AddScoped<ExceptionHandlingMiddleware>();
 
+			services.AddGrpc();
+
 			return services;
 		}
 	}

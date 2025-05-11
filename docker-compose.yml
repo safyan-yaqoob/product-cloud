@@ -142,6 +142,17 @@ services:
       - redis-data:/data
     restart: always
 
+  messageBroker:
+    image: rabbitmq:management
+    container_name: ProductCloud.RabbitMq
+    hostname: product-cloud-mq
+    volumes:
+      - ./.containers/queue/data/:/var/lib/rabbitmq
+      - ./.containers/queue/log/:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
 volumes:
   product-data:
   billing-data:

@@ -30,7 +30,7 @@ namespace BillingService.Extensions
         .MapAddPaymentMethod()
         .MapUpdatePaymentMethod()
         .MapStripeWebhook()
-        .MapInitiateBilling()
+        .MapGetActiveCheckoutSession()
         .MapGetTenantPaymentMethods()
         .MapRefundSubscriptionPayment();
 
