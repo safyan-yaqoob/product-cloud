@@ -29,8 +29,6 @@ namespace SubscriptionService.Extensions
               .MapCancelSubscription()
               .MapReactivateSubscription();
 
-            app.MapGrpcService<SubscriptionGrpc>();
-
             return app;
         }
     }

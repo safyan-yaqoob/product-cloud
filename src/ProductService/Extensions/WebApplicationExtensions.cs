@@ -8,6 +8,7 @@ using ProductService.Features.GetProductById;
 using ProductService.Features.GetProducts;
 using ProductService.Features.UpdateProduct;
 using ProductService.Middleware;
+using SharedKernal.Protos;
 
 namespace ProductService.Extensions
 {
@@ -37,6 +38,8 @@ namespace ProductService.Extensions
 			   .MapGetPlansEndpoint()
 			   .MapDeletePlanEndpoint()
 			   .MapGetPlanFeaturesEndpoint();
+
+			app.MapGrpcService<PlanGrpc.PlanGrpcBase>();
 
 			return app;
 		}
