@@ -1,0 +1,19 @@
+<Project>
+	<PropertyGroup Label="Framework">
+		<TargetFramework>net9.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
+	<PropertyGroup Label="Product">
+		<Product>ProductCloud</Product>
+		<Authors>Safyan Yaqoob</Authors>
+		<RepositoryType>Git</RepositoryType>
+	</PropertyGroup>
+	<PropertyGroup Label="Debug">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+</Project>

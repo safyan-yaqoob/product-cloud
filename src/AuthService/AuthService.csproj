@@ -1,44 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<Nullable>disable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>9b356824-f5bf-4805-9d01-d610375231a5</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.1" />
-		<PackageReference Include="AspNetCore.Serilog.RequestLoggingMiddleware" Version="1.0.2" />
-		<PackageReference Include="Humanizer" Version="2.14.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="9.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-		<PackageReference Include="Npgsql" Version="9.0.3" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-		<PackageReference Include="OpenIddict.AspNetCore" Version="6.2.0" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="6.2.0" />
-		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
-		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
-		<PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.3.0" />
-		<PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration" Version="1.0.1" />
+		<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL"/>
+		<PackageReference Include="AspNetCore.Serilog.RequestLoggingMiddleware"/>
+		<PackageReference Include="Humanizer"/>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google"/>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"/>
+		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter"/>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design"/>
+		<PackageReference Include="OpenIddict.AspNetCore"/>
+		<PackageReference Include="OpenIddict.EntityFrameworkCore"/>
+		<PackageReference Include="Serilog.AspNetCore"/>
+		<PackageReference Include="System.Linq.Async"/>
+		<PackageReference Include="Serilog.Sinks.PostgreSQL"/>
+		<PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration"/>
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen"/>
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI"/>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -14,9 +14,9 @@ namespace IdentityServer.Pages.Scopes
         }
 
         public IEnumerable<ScopeSummaryRecord> Scopes { get; private set; } = default!;
-        public string? Filter { get; set; }
+        public string Filter { get; set; }
 
-        public async Task OnGetAsync(string? filter)
+        public async Task OnGetAsync(string filter)
         {
             Filter = filter;
             Scopes = await _repository.GetScopesAsync();

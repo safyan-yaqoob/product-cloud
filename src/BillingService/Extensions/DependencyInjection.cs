@@ -3,8 +3,6 @@ using BillingService.Database;
 using BillingService.Middleware;
 using SharedKernal.Infrastructure;
 using SharedKernal.CQRS;
-using MassTransit;
-using BillingService.Consumers;
 
 namespace BillingService.Extensions
 {
@@ -17,10 +15,6 @@ namespace BillingService.Extensions
 
 			services.AddSharedInfrastructure(configuration);
 			services.AddMessageBroker<BillingDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
-			services.AddMassTransit(ctg =>
-			{
-				ctg.AddConsumer<SubscriptionCreatedConsumer>();
-			});
 
 			services.Scan(selector =>
 			{

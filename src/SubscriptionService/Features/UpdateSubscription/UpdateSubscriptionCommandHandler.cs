@@ -23,7 +23,6 @@ namespace SubscriptionService.Features.UpdateSubscription
             if (!subscription.IsActive)
                 throw new AppException(AppError.Validation("Cannot change plan on an inactive subscription."));
 
-            subscription.PlanName = command.NewPlanName;
             subscription.EndDate = null;
             subscription.StartDate = DateTime.UtcNow;
 

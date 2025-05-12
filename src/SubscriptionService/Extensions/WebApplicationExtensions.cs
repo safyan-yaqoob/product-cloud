@@ -3,7 +3,6 @@ using SubscriptionService.Features.CreateSubscription;
 using SubscriptionService.Features.GetSubscriptionsByTenant;
 using SubscriptionService.Features.ReactivateSubscription;
 using SubscriptionService.Features.UpdateSubscription;
-using SubscriptionService.Grpc;
 using SubscriptionService.Middleware;
 
 namespace SubscriptionService.Extensions

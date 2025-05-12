@@ -20,7 +20,6 @@ namespace SubscriptionService.Features.GetSubscriptionsByTenant
             {
                 Id = subscription.Id,
                 TenantId = subscription.TenantId,
-                PlanName = subscription.PlanName,
                 StartDate = subscription.StartDate,
                 EndDate = subscription.EndDate,
                 IsActive = subscription.IsActive

@@ -4,31 +4,30 @@ using SubscriptionService.Entities;
 
 namespace SubscriptionService.Configurations
 {
-  public sealed class SubscriptionTypeConfiguration : IEntityTypeConfiguration<Subscription>
-  {
-    public void Configure(EntityTypeBuilder<Subscription> entity)
+    public sealed class SubscriptionTypeConfiguration : IEntityTypeConfiguration<Subscription>
     {
-      entity.HasKey(e => e.Id);
+        public void Configure(EntityTypeBuilder<Subscription> entity)
+        {
+            entity.HasKey(e => e.Id);
 
-      entity.Property(e => e.Id)
-          .ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
 
-      entity.Property(e => e.TenantId)
-          .IsRequired();
+            entity.Property(e => e.TenantId)
+                .IsRequired();
 
-      entity.Property(e => e.PlanName)
-          .IsRequired()
-          .HasMaxLength(100);
+            entity.Property(e => e.PlanId)
+                .IsRequired();
 
-      entity.Property(e => e.StartDate)
-          .IsRequired();
+            entity.Property(e => e.StartDate)
+                .IsRequired();
 
-      entity.Property(e => e.EndDate);
+            entity.Property(e => e.EndDate);
 
-      entity.Property(e => e.CreatedAt)
-          .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-      entity.Property(e => e.IsActive).IsRequired();
+            entity.Property(e => e.IsActive).IsRequired();
+        }
     }
-  }
 }
