@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<UserSecretsId>9b356824-f5bf-4805-9d01-d610375231a5</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+		<PackageReference Include="AspNetCore.Serilog.RequestLoggingMiddleware" />
+		<PackageReference Include="Humanizer" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+		<PackageReference Include="OpenIddict.AspNetCore" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="System.Linq.Async" />
+		<PackageReference Include="Serilog.Sinks.PostgreSQL" />
+		<PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Aspire\ProductCloud.ServiceDefaults\ProductCloud.ServiceDefaults.csproj" />
+	  <ProjectReference Include="..\..\BuildingBlocks\ProductCloud.SharedKernal\ProductCloud.SharedKernal.csproj" />
+	</ItemGroup>
+</Project>

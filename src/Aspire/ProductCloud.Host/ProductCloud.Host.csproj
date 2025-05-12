@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<IsAspireHost>true</IsAspireHost>
+		<UserSecretsId>c90dd111-453a-4d91-a682-887246000b18</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup Label="Aspire">
+		<PackageReference Include="Aspire.Hosting.AppHost" />
+		<PackageReference Include="Aspire.Hosting.RabbitMQ" />
+		<PackageReference Include="Aspire.Hosting.PostgreSQL" />
+		<PackageReference Include="Aspire.Hosting.Redis" />
+		<PackageReference Include="Grpc.Net.ClientFactory" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\api.gateway\api.gateway.csproj" />
+	  <ProjectReference Include="..\..\Services\AuthService\AuthService.csproj" />
+	  <ProjectReference Include="..\..\Services\BillingService\BillingService.csproj" />
+	  <ProjectReference Include="..\..\Services\ProductService\ProductService.csproj" />
+	  <ProjectReference Include="..\..\Services\SubscriptionService\SubscriptionService.csproj" />
+	  <ProjectReference Include="..\..\Services\TenantService\TenantService.csproj" />
+	</ItemGroup>
+
+</Project>

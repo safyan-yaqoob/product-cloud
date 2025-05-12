@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "ProductCloud.SharedKernal.Protos";
+
+package subscription;
+
+service SubscriptionGrpc {
+  rpc GetActiveSubscription (GetSubscriptionRequest) returns (SubscriptionResponse);
+}
+
+message GetSubscriptionRequest {
+  string subscriptionId = 1;
+}
+
+message SubscriptionResponse {
+  string subscriptionId = 1;
+  int32 planType = 2;
+  string status = 3;
+  string startDate = 4;
+  string endDate = 5;
+  string ammount = 10;
+}

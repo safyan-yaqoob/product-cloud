@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "ProductCloud.SharedKernal.Protos";
+
+package billing;
+
+service BillingService {
+  rpc GetBillingInfo (GetBillingInfoRequest) returns (BillingInfoResponse);
+}
+
+message GetBillingInfoRequest {
+  string tenantId = 1;
+}
+
+message BillingInfoResponse {
+  string invoiceId = 1;
+  string paymentMethod = 2;
+  string lastPaymentDate = 3;
+  string status = 4;
+}

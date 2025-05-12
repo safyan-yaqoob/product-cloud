@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REGISTRY-}apigateway
     build:
       context: .
-      dockerfile: api.gateway/Dockerfile
+      dockerfile: src/api.gateway/Dockerfile
     depends_on:
       - product
       - billing
@@ -22,7 +22,7 @@ services:
     image: ${DOCKER_REGISTRY-}product
     build:
       context: .
-      dockerfile: src/ProductService/Dockerfile
+      dockerfile: src/Services/ProductService/Dockerfile
     depends_on:
       - productDb
     environment:
@@ -36,7 +36,7 @@ services:
     image: ${DOCKER_REGISTRY-}billing
     build:
       context: .
-      dockerfile: src/BillingService/Dockerfile
+      dockerfile: src/Services/BillingService/Dockerfile
     depends_on:
       - billingDb
     environment:
@@ -50,7 +50,7 @@ services:
     image: ${DOCKER_REGISTRY-}tenant
     build:
       context: .
-      dockerfile: src/TenantService/Dockerfile
+      dockerfile: src/Services/TenantService/Dockerfile
     depends_on:
       - tenantDb
     environment:
@@ -64,7 +64,7 @@ services:
     image: ${DOCKER_REGISTRY-}subscription
     build:
       context: .
-      dockerfile: src/SubscriptionService/Dockerfile
+      dockerfile: src/Services/SubscriptionService/Dockerfile
     depends_on:
       - subscriptionDb
     environment:
@@ -78,7 +78,7 @@ services:
     image: ${DOCKER_REGISTRY-}auth
     build:
       context: .
-      dockerfile: src/AuthService/Dockerfile
+      dockerfile: src/Services/AuthService/Dockerfile
     depends_on:
       - authDb
     environment:
