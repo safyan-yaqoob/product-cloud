@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
 using SubscriptionService.Database;
-using SubscriptionService.Entities;
+using SubscriptionService.Database.Entities;
 
 namespace SubscriptionService.Features.CancelSubscription
 {

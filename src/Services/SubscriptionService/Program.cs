@@ -19,9 +19,7 @@ builder.AddNpgsqlDbContext<SubscriptionDbContext>("subscriptionDb", null, option
          .EnableDetailedErrors();
 });
 
-builder.Services
-  .AddServices(builder.Configuration)
-  .AddOpenApi();
+builder.Services.AddServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {

@@ -4,38 +4,43 @@ using IdentityServer.Extensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.AddServiceDefaults();
-
-builder.Host.UseSerilog((context, configuration) =>
+internal class Program
 {
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.AddNpgsqlDbContext<AuthDbContext>("authDb", null, options =>
-{
-  options.UseNpgsql(
-      builder.Configuration.GetConnectionString("authDb"),
-      npgsql => npgsql.MigrationsAssembly(typeof(AuthDbContext).Assembly.GetName().Name)
-  );
+        builder.AddServiceDefaults();
 
-  options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
-         .EnableDetailedErrors();
+        builder.Host.UseSerilog((context, configuration) =>
+        {
+            configuration.ReadFrom.Configuration(context.Configuration);
+        });
 
-  options.UseOpenIddict();
-});
+        builder.AddNpgsqlDbContext<AuthDbContext>("authDb", null, options =>
+        {
+            options.UseNpgsql(builder.Configuration.GetConnectionString("authDb"),
+                npgsql => npgsql.MigrationsAssembly(typeof(AuthDbContext).Assembly.GetName().Name));
 
-builder.Services.RegisterServices(builder.Configuration);
- 
-var app = builder.Build();
+            options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+                .EnableDetailedErrors();
 
-app.ConfigurePipeline();
+            options.UseOpenIddict();
+        });
 
-using (var scope = app.Services.CreateScope())
-{
-	var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-	db.Database.Migrate(); // Apply any pending EF Core migrations
+        builder.Services.RegisterServices(builder.Configuration);
+
+        var app = builder.Build();
+
+        app.ConfigurePipeline();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            db.Database.Migrate(); // Apply any pending EF Core migrations
+        }
+        app.Run();
+    }
 }
-app.Run();

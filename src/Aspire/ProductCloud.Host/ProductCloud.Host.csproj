@@ -3,6 +3,8 @@
 	<Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
 
 	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
 		<OutputType>Exe</OutputType>
 		<IsAspireHost>true</IsAspireHost>
 		<UserSecretsId>c90dd111-453a-4d91-a682-887246000b18</UserSecretsId>
@@ -13,7 +15,12 @@
 		<PackageReference Include="Aspire.Hosting.RabbitMQ" />
 		<PackageReference Include="Aspire.Hosting.PostgreSQL" />
 		<PackageReference Include="Aspire.Hosting.Redis" />
+		<PackageReference Include="Grpc.AspNetCore" />
 		<PackageReference Include="Grpc.Net.ClientFactory" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+		<PackageReference Include="Quartz.OpenTelemetry.Instrumentation" />
 	</ItemGroup>
 
 	<ItemGroup>

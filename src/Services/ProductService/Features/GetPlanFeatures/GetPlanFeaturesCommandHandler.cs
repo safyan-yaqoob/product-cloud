@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Entities;
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
+using ProductService.Database.Entities;
 
 namespace ProductService.Features.GetPlanFeatures;
 

@@ -12,18 +12,18 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/BillingService/BillingService.csproj", "src/BillingService/"]
-COPY ["aspire/ServiceDefaults/ServiceDefaults.csproj", "aspire/ServiceDefaults/"]
-COPY ["src/Shared/Shared.csproj", "src/Shared/"]
-RUN dotnet restore "./src/BillingService/BillingService.csproj"
+COPY ["src/Services/BillingService/BillingService.csproj", "Services/BillingService/"]
+COPY ["src/Aspire/ProductCloud.ServiceDefaults/ProductCloud.ServiceDefaults.csproj", "Aspire/ProductCloud.ServiceDefaults/"]
+COPY ["src/BuildingBlocks/ProductCloud.SharedKernal/ProductCloud.SharedKernal.csproj", "BuildingBlocks/ProductCloud.SharedKernal/"]
+RUN dotnet restore "./Services/BillingService/BillingService.csproj"
 COPY . .
-WORKDIR "/src/src/BillingService"
+WORKDIR "/src/Services/BillingService"
 RUN dotnet build "./BillingService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BillingService.csproj" -c $BUILD_CONFIGURATION -o /app/publish
+RUN dotnet publish "./BillingService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final

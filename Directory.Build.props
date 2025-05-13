@@ -1,7 +1,5 @@
 <Project>
 	<PropertyGroup Label="Framework">
-		<TargetFramework>net9.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

@@ -1,8 +1,8 @@
-using BillingService.Entities;
+using BillingService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BillingService.Configurations
+namespace BillingService.Database.Configurations
 {
   public sealed class BillingTypeConfiguration : IEntityTypeConfiguration<Billing>
   {

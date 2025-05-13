@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SubscriptionService.Entities;
+using SubscriptionService.Database.Entities;
 
-namespace SubscriptionService.Configurations
+namespace SubscriptionService.Database.Configurations
 {
     public sealed class SubscriptionTypeConfiguration : IEntityTypeConfiguration<Subscription>
     {

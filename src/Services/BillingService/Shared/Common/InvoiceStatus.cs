@@ -1,4 +1,4 @@
-namespace BillingService.Common
+namespace BillingService.Shared.Common
 {
   public enum InvoiceStatus
   {

@@ -1,6 +1,6 @@
 ﻿using BillingService.Abstraction;
 using BillingService.Database;
-using BillingService.Entities;
+using BillingService.Database.Entities;
 using BillingService.Shared.Models;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

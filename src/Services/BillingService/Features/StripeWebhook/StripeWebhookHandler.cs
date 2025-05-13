@@ -1,11 +1,11 @@
-using BillingService.Common;
-using BillingService.Entities;
 using Microsoft.EntityFrameworkCore;
 using ProductCloud.SharedKernal.CQRS;
 using Stripe;
 using BillingService.Database;
 using Stripe.Checkout;
 using ProductCloud.SharedKernal.Common;
+using BillingService.Database.Entities;
+using BillingService.Shared.Common;
 
 namespace BillingService.Features.StripeWebhook
 {
@@ -58,18 +58,18 @@ namespace BillingService.Features.StripeWebhook
 
             if (paymentStatus == "paid")
             {
-                var invoice = await _context.Set<Entities.Invoice>()
+                var invoice = await _context.Set<Database.Entities.Invoice>()
                     .Where(i => i.TenantId == tenantId && i.Status == InvoiceStatus.Pending)
                     .FirstOrDefaultAsync();
 
                 if (invoice != null)
                 {
                     invoice.Status = InvoiceStatus.Paid;
-                    _context.Set<Entities.Invoice>().Update(invoice);
+                    _context.Set<Database.Entities.Invoice>().Update(invoice);
                 }
                 else
                 {
-                    invoice = new Entities.Invoice()
+                    invoice = new Database.Entities.Invoice()
                     {
                         TenantId = Guid.Parse(session.ClientReferenceId), // Tenant ID from session
                         Amount = Convert.ToDecimal(session.AmountTotal / 100),  // Stripe provides amount in cents
@@ -79,7 +79,7 @@ namespace BillingService.Features.StripeWebhook
                         DueDate = DateTime.UtcNow.AddDays(7)
                     };
 
-                    await _context.Set<Entities.Invoice>().AddAsync(invoice);
+                    await _context.Set<Database.Entities.Invoice>().AddAsync(invoice);
                 }
 
                 var billingTransaction = await _context.Set<Billing>()

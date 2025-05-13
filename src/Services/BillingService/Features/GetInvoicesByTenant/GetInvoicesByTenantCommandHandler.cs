@@ -1,5 +1,5 @@
 using BillingService.Database;
-using BillingService.Entities;
+using BillingService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using ProductCloud.SharedKernal.CQRS;
 

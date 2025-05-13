@@ -19,8 +19,7 @@ builder.AddNpgsqlDbContext<BillingDbContext>("billingDb", null, options =>
 });
 
 builder.Services
-  .AddServices(builder.Configuration)
-  .AddOpenApi();
+  .AddServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {

@@ -5,7 +5,7 @@ using ProductCloud.SharedKernal.CQRS;
 using ProductCloud.SharedKernal.Messaging.Events.Subscription;
 using ProductCloud.SharedKernal.Protos;
 using SubscriptionService.Database;
-using SubscriptionService.Entities;
+using SubscriptionService.Database.Entities;
 
 namespace SubscriptionService.Features.CreateSubscription
 {

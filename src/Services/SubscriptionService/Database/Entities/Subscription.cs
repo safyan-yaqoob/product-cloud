@@ -1,4 +1,4 @@
-namespace SubscriptionService.Entities
+namespace SubscriptionService.Database.Entities
 {
     public class Subscription
     {

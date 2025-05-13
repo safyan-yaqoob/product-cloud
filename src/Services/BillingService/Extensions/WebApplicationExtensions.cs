@@ -10,31 +10,30 @@ using BillingService.Middleware;
 
 namespace BillingService.Extensions
 {
-  public static class WebApplicationExtensions
-  {
-    public static WebApplication ConfigurePipeline(this WebApplication app, IConfiguration configuration)
+    public static class WebApplicationExtensions
     {
-      if (app.Environment.IsDevelopment())
-      {
-        app.MapOpenApi();
-        app.UseSwagger();
-        app.UseSwaggerUI();
-      }
+        public static WebApplication ConfigurePipeline(this WebApplication app, IConfiguration configuration)
+        {
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-      app.UseHttpsRedirection();
-      app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-      app.MapGroup("/billing")
-        .MapGetBillingById()
-        .MapGetInvoicesByTenant()
-        .MapAddPaymentMethod()
-        .MapUpdatePaymentMethod()
-        .MapStripeWebhook()
-        .MapGetActiveCheckoutSession()
-        .MapGetTenantPaymentMethods()
-        .MapRefundSubscriptionPayment();
+            app.MapGroup("/billing")
+              .MapGetBillingById()
+              .MapGetInvoicesByTenant()
+              .MapAddPaymentMethod()
+              .MapUpdatePaymentMethod()
+              .MapStripeWebhook()
+              .MapGetActiveCheckoutSession()
+              .MapGetTenantPaymentMethods()
+              .MapRefundSubscriptionPayment();
 
-      return app;
+            return app;
+        }
     }
-  }
 }

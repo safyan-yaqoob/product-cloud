@@ -1,8 +1,8 @@
 ﻿using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Entities;
 using ProductCloud.SharedKernal.Protos;
+using ProductService.Database.Entities;
 
 namespace ProductService.Grpc
 {

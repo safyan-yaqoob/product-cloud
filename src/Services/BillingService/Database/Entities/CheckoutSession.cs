@@ -1,4 +1,4 @@
-﻿namespace BillingService.Entities
+﻿namespace BillingService.Database.Entities
 {
     public class CheckoutSession
     {

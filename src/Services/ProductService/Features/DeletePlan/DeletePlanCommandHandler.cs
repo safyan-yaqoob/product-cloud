@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Entities;
 using ProductService.Features.GetPlan;
 using ProductCloud.SharedKernal.CQRS;
+using ProductService.Database.Entities;
 
 namespace ProductService.Features.DeletePlan
 {

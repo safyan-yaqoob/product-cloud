@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<OutputType>Library</OutputType>
 		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>ServiceDefaults</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -9,8 +10,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.HealthCheck" />
-		<PackageReference Include="Grpc.Net.ClientFactory"/>
+		<PackageReference Include="Grpc.Net.ClientFactory" />
 		<PackageReference Include="AspNetCore.HealthChecks.Uris" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 		<PackageReference Include="Microsoft.Extensions.Http" />
 		<PackageReference Include="Microsoft.Extensions.Http.Resilience" />

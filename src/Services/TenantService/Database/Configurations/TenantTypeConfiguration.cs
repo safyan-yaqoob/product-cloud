@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TenantService.Entities;
 
-namespace TenantService.Configurations
+namespace TenantService.Database.Configurations
 {
 	public sealed class TenantTypeConfiguration : IEntityTypeConfiguration<Tenant>
 	{

@@ -18,9 +18,7 @@ builder.AddNpgsqlDbContext<ProductDbContext>("productDb", null, options =>
            .EnableDetailedErrors();
 });
 
-builder.Services
-  .AddServices(builder.Configuration)
-  .AddOpenApi();
+builder.Services.AddServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {

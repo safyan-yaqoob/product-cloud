@@ -1,6 +1,6 @@
-using BillingService.Common;
+using BillingService.Shared.Common;
 
-namespace BillingService.Entities
+namespace BillingService.Database.Entities
 {
   public class Invoice
   {

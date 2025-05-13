@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Entities;
 using ProductCloud.SharedKernal.CQRS;
+using ProductService.Database.Entities;
 
 namespace ProductService.Features.GetPlans
 {

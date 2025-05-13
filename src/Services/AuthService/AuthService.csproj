@@ -1,30 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<LangVersion>latest</LangVersion>
 		<UserSecretsId>9b356824-f5bf-4805-9d01-d610375231a5</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
-		<PackageReference Include="AspNetCore.Serilog.RequestLoggingMiddleware" />
-		<PackageReference Include="Humanizer" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
-		<PackageReference Include="OpenIddict.AspNetCore" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" />
-		<PackageReference Include="Serilog.AspNetCore" />
-		<PackageReference Include="System.Linq.Async" />
-		<PackageReference Include="Serilog.Sinks.PostgreSQL" />
-		<PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+	  <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+	  <PackageReference Include="AspNetCore.Serilog.RequestLoggingMiddleware" />
+	  <PackageReference Include="Humanizer" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+	  <PackageReference Include="OpenIddict.AspNetCore" />
+	  <PackageReference Include="OpenIddict.EntityFrameworkCore" />
+	  <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+	  <PackageReference Include="Serilog.AspNetCore" />
+	  <PackageReference Include="Serilog.Sinks.PostgreSQL" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+	  <PackageReference Include="System.Linq.Async" />
 	</ItemGroup>
 
 	<ItemGroup>

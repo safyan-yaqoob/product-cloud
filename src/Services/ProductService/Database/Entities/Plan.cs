@@ -1,6 +1,6 @@
 using ProductService.Common;
 
-namespace ProductService.Entities
+namespace ProductService.Database.Entities
 {
 	public class Plan
 	{

@@ -1,4 +1,4 @@
-using BillingService.Common;
+using BillingService.Shared.Common;
 
 namespace BillingService.Features.GetInvoicesByTenant
 {

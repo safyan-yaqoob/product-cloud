@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProductService.Entities;
+using ProductService.Database.Entities;
 
-namespace ProductService.Configurations
+namespace ProductService.Database.Configurations
 {
 	public sealed class FeatureTypeConfiguration : IEntityTypeConfiguration<Feature>
 	{

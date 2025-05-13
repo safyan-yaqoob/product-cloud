@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Entities;
 using ProductService.Features.GetPlans;
 using ProductCloud.SharedKernal.CQRS;
+using ProductService.Database.Entities;
 
 namespace ProductService.Features.GetProductById
 {
