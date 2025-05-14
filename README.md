@@ -11,8 +11,8 @@ Thanks!
 
 ## 📖 Table of Contents
 
--   [Microservices Template with vertical slice architecture](#mircoservices-template)
-    -   [Install](#setup)
+-   [Microservices Template with vertical slice architecture](# microservices-template)
+    -   [Install](#install)
     -   [Features](#features)
     -   [Libraries](#libraries)
     -   [Getting Started](#getting-started)
@@ -23,24 +23,10 @@ Thanks!
 
 ---
 
-## Setup
+## Install
 * Clone this repository
 ```bash
 git clone https://github.com/safyan-yaqoob/product-cloud.git
-```
-
-## Getting Started
-
-1. This application uses `HTTPS` for hosting APIs, to set up a valid certificate on your machine, you can create a [Self-Signed Certificate](https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-9.0#macos-or-linux), see more about enforce certificate [here](https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl).
-2. Install git - [https://git-scm.com/downloads](https://git-scm.com/downloads).
-3. Install .NET Core 9.0 - [https://dotnet.microsoft.com/download/dotnet/9.0](https://dotnet.microsoft.com/download/dotnet/9.0).
-4. Install Visual Studio, Rider, or VSCode.
-11. Swagger UI for API documentation in each service
-12. [Docker](https://www.docker.com/) (for Aspire orchestration)
-13. Run with .NET Aspire
-    
-```bash
-dotnet aspire run
 ```
 
 ## Features
@@ -67,6 +53,22 @@ dotnet aspire run
 -   ✔️ **[`Opentelemetry-dotnet`](https://github.com/open-telemetry/opentelemetry-dotnet)** - The OpenTelemetry .NET Client
 -   ✔️ **[`Newtonsoft.Json`](https://github.com/JamesNK/Newtonsoft.Json)** - Json.NET is a popular high-performance JSON framework for .NET
 -   ✔️ **[`AspNetCore.Diagnostics.HealthChecks`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks)** - Enterprise HealthChecks for ASP.NET Core Diagnostics Package
+
+## Getting Started
+
+1. This application uses `HTTPS` for hosting APIs, to set up a valid certificate on your machine, you can create a [Self-Signed Certificate](https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-9.0#macos-or-linux), see more about enforce certificate [here](https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl).
+2. Install git - [https://git-scm.com/downloads](https://git-scm.com/downloads).
+3. Install .NET Core 9.0 - [https://dotnet.microsoft.com/download/dotnet/9.0](https://dotnet.microsoft.com/download/dotnet/9.0).
+4. Install Visual Studio, Rider, or VSCode.
+11. Swagger UI for API documentation in each service
+12. [Docker](https://www.docker.com/) (for Aspire orchestration)
+13. Run with .NET Aspire
+    
+```bash
+dotnet aspire run
+```
+
+## Application Structure
 
 ### Folder Structure
 
