@@ -68,5 +68,11 @@ namespace TenantService.Extensions
 			
 			return services;
 		}
-	}
+
+        public static IServiceCollection AddDataSeeder(this IServiceCollection services)
+        {
+            services.AddScoped<TenantDataSeeder>();
+            return services;
+        }
+    }
 }

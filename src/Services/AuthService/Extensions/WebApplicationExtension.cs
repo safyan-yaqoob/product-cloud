@@ -1,4 +1,5 @@
 using AspNetCore.Serilog.RequestLoggingMiddleware;
+using AuthService.Middleware;
 
 namespace IdentityServer.Extensions
 {
@@ -13,14 +14,13 @@ namespace IdentityServer.Extensions
                 app.UseSwaggerUI();
             }
 
-            app.UseSerilogRequestLogging();
-
+            app.UseSerilogRequestLogging();           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseCors();
-
             app.UseAuthentication();
+            app.UseMiddleware<AuthenticationMiddleware>();
             app.UseAuthorization();
 
             app.MapControllers();

@@ -12,18 +12,19 @@ namespace IdentityServer.Pages.Clients
         public AddClient(ClientAppRepository repository)
         {
             _repository = repository;
-        }
-
-        [BindProperty]
-        public ClientRecord InputModel { get; set; } = default!;
+        }        [BindProperty]
+        public ClientRecord InputModel { get; set; }
 
         public bool Created { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public void OnGet()
+        {
+            InputModel = new ClientRecord();
+        }        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                await _repository.CreateClientAsync(InputModel);
+                InputModel.ClientSecret = await _repository.CreateClientAsync(InputModel);
                 Created = true;
             }
 

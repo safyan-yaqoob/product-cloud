@@ -1,7 +1,7 @@
 using ProductCloud.SharedKernal.CQRS;
 using System.Text.RegularExpressions;
 using TenantService.Database;
-using TenantService.Entities;
+using TenantService.Database.Entities;
 
 namespace TenantService.Features.CreateTenant
 {

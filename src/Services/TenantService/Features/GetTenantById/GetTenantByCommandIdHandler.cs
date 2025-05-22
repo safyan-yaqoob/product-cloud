@@ -3,7 +3,7 @@ using ProductCloud.SharedKernal.Caching;
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
 using TenantService.Database;
-using TenantService.Entities;
+using TenantService.Database.Entities;
 
 namespace TenantService.Features.GetTenantById
 {

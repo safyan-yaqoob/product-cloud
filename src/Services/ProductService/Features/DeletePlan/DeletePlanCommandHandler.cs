@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Database;
-using ProductService.Features.GetPlan;
 using ProductCloud.SharedKernal.CQRS;
 using ProductService.Database.Entities;
 

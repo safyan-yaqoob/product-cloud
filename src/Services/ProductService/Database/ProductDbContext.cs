@@ -1,12 +1,17 @@
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ProductService.Database.Entities;
 using System.Reflection;
 
 namespace ProductService.Database
 {
   public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
   {
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Plan> Plans { get; set; }
+    public DbSet<Feature> Features { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);

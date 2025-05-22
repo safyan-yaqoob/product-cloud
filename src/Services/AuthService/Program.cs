@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Microsoft.Extensions.Hosting;
+using ServiceDefaults;
 
 internal class Program
 {
@@ -39,7 +40,7 @@ internal class Program
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-            db.Database.Migrate(); // Apply any pending EF Core migrations
+            db.Database.Migrate();
         }
         app.Run();
     }

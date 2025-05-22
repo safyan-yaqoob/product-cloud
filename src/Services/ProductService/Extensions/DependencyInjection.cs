@@ -29,5 +29,11 @@ namespace ProductService.Extensions
 
 			return services;
 		}
+
+		public static IServiceCollection AddDataSeeder(this IServiceCollection services)
+		{
+			services.AddScoped<ProductDataSeeder>();
+			return services;
+		}
 	}
 }

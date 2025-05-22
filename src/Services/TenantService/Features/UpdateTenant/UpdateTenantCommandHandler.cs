@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
 using TenantService.Database;
-using TenantService.Entities;
+using TenantService.Database.Entities;
 
 namespace TenantService.Features.UpdateTenant;
 

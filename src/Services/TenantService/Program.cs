@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ServiceDefaults;
+using TenantService;
 using TenantService.Database;
 using TenantService.Extensions;
 
@@ -20,6 +22,8 @@ builder.AddNpgsqlDbContext<TenantDbContext>("tenantDb", null, options =>
 
 builder.Services.AddServices(builder.Configuration);
 
+builder.Services.AddDataSeeder();
+
 var app = builder.Build();
 
 app.ConfigurePipeline(builder.Configuration);
@@ -29,7 +33,15 @@ app.UseCors();
 using (var scope = app.Services.CreateScope())
 {
 	var db = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
-	db.Database.Migrate(); // Apply any pending EF Core migrations
+	db.Database.Migrate();
 }
+
+
+//if (app.Environment.IsDevelopment())
+//{
+//    using var scope = app.Services.CreateScope();
+//    var seeder = scope.ServiceProvider.GetRequiredService<TenantDataSeeder>();
+//    await seeder.SeedAsync();
+//}
 
 app.Run();

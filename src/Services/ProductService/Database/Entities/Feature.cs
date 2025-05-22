@@ -7,5 +7,6 @@
 		public string Description { get; set; } = default!;
 		public Guid PlanId { get; set; }
 		public Plan Plan { get; set; } = default!;
+		public DateTime CreatedAt { get; set; }
 	}
 }

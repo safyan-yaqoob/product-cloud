@@ -11,24 +11,28 @@ namespace IdentityServer.Pages.Clients
         public EditClient(ClientAppRepository repository)
         {
             _repository = repository;
-        }
+        }        [BindProperty]
+        public EditClientRecord InputModel { get; set; }
 
-        [BindProperty]
-        public EditClientRecord InputModel { get; set; } = default!;
+        public string ErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToPage("/Admin/Clients/Index");
+            }
+
             var model = await _repository.GetClientAsync(id);
 
             if (model == null)
             {
+                ErrorMessage = "Client not found.";
                 return RedirectToPage("/Admin/Clients/Index");
             }
-            else
-            {
-                InputModel = model;
-                return Page();
-            }
+
+            InputModel = model;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string id)

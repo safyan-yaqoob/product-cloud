@@ -56,11 +56,10 @@ namespace AuthService.Controllers
             identity.SetClaim(Claims.Subject, userId)
                 .SetClaim(Claims.Email, userId)
                 .SetClaim(Claims.Name, userId)
-                .SetClaims(Claims.Role, new List<string> { "user", "admin" }.ToImmutableArray());
+                .SetClaims(Claims.Role, new List<string> { "user" }.ToImmutableArray());
 
             identity.SetScopes(request.GetScopes());
             identity.SetResources(await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
-
             identity.SetDestinations(c => AuthorizationService.GetDestinations(identity, c));
 
             return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -93,29 +92,43 @@ namespace AuthService.Controllers
 			}
 
 			var user = await userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return Forbid(
+					authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+					properties: new AuthenticationProperties(new Dictionary<string, string>
+					{
+						[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+						[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+							"User not found."
+					}));
+			}
 
 			var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType, Claims.Name, Claims.Role);
 
-			// Add claims and set destinations
+			// Add the subject claim
 			var subjectClaim = new Claim(Claims.Subject, email);
 			subjectClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
 			identity.AddClaim(subjectClaim);
 
+			// Add the email claim
 			var emailClaim = new Claim(Claims.Email, email);
 			emailClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
 			identity.AddClaim(emailClaim);
 
-			var nameClaim = new Claim(Claims.Name, $"{user.FirstName} {user.LastName}");
+			// Add the name claim
+			var nameClaim = new Claim(Claims.Name, user.UserName);
 			nameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
 			identity.AddClaim(nameClaim);
 
-			var userIdClaim = new Claim("userId", user.Id.ToString());
-			userIdClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
-			identity.AddClaim(userIdClaim);
-
-			var roleClaim = new Claim(Claims.Role, "admin");
-			roleClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
-			identity.AddClaim(roleClaim);
+			// Add the role claims
+			var roles = await userManager.GetRolesAsync(user);
+			foreach (var role in roles)
+			{
+				var roleClaim = new Claim(Claims.Role, role);
+				roleClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+				identity.AddClaim(roleClaim);
+			}
 
 			identity.SetScopes(request.GetScopes());
 			identity.SetResources(await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
@@ -127,8 +140,10 @@ namespace AuthService.Controllers
         [HttpPost("~/connect/logout")]
         public async Task<IActionResult> LogoutPost()
         {
+            // Clear the local authentication cookie
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
+            // Redirect to home page after logout
             return SignOut(
                 authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
                 properties: new AuthenticationProperties

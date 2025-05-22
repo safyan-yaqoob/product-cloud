@@ -1,51 +1,81 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-gray-50">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - See U Identity</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/IdentityServer.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Auth Service</title>
+	<link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">See U Identity</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+<body class="h-full">
+	@{
+		bool isAuthPage = Context.Request.Path.StartsWithSegments("/Identity/Account");
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - IdentityServer - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+		if (!isAuthPage)
+		{
+			<header class="bg-white shadow-sm">
+				<nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div class="flex h-16 justify-between items-center">
+						<div class="flex">
+							<a class="flex items-center text-xl font-semibold text-gray-900" asp-area="" asp-page="/Index">
+								Auth Service
+							</a>
+						</div>
+						@{
+							if (User.Identity?.IsAuthenticated == true)
+							{
+								<div class="flex items-center sm:hidden">
+									<button type="button" class="mobile-menu-button inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+										<span class="sr-only">Open main menu</span>
+										<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+										</svg>
+									</button>
+								</div>
 
+								<div class="hidden sm:flex sm:items-center sm:space-x-8">
+									<a class="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium" asp-area="" asp-page="/Index">Dashboard</a>
+									<a class="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium" asp-area="" asp-page="/Admin/Clients/Index">Clients</a>
+									<a class="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium" asp-area="" asp-page="/Admin/Users/Index">Users</a>
+									<partial name="_LoginPartial" />
+								</div>
+
+								<div class="sm:hidden hidden" id="mobile-menu">
+									<div class="space-y-1 pb-3 pt-2">
+										<a class="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900" asp-area="" asp-page="/Index">Dashboard</a>
+										<a class="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900" asp-area="" asp-page="/Admin/Clients/Index">Clients</a>
+										<a class="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900" asp-area="" asp-page="/Admin/Users/Index">Users</a>
+										<div class="border-t border-gray-200 pt-3">
+											<partial name="_LoginPartial" />
+										</div>
+									</div>
+								</div>
+							}
+						}
+					</div>
+				</nav>
+			</header>
+		}
+
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+			<main role="main">
+				@RenderBody()
+			</main>
+		</div>
+	}
+
+	<footer class="fixed bottom-0 w-full bg-white border-t border-gray-200">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+			<div class="text-center text-sm text-gray-500">
+				&copy; 2024 - IdentityServer - <a class="text-blue-600 hover:text-blue-800" asp-area="" asp-page="/Privacy">Privacy</a>
+			</div>
+		</div>
+	</footer>   
+     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

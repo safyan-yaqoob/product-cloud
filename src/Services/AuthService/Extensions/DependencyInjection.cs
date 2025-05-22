@@ -3,6 +3,7 @@ using AuthService.Database.Repository;
 using IdentityServer;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ProductCloud.SharedKernal.Infrastructure;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -29,63 +30,79 @@ namespace AuthService.Extensions
                 };
             })
             .AddDefaultTokenProviders()
-            .AddEntityFrameworkStores<AuthDbContext>();
-
+            .AddEntityFrameworkStores<AuthDbContext>();            
+            
             services.AddOpenIddict().AddCore(options =>
             {
-                options.UseEntityFrameworkCore()
-                        .UseDbContext<AuthDbContext>();
+                options.UseEntityFrameworkCore().UseDbContext<AuthDbContext>();
             }).AddServer(options =>
-                {
-                    options.SetAuthorizationEndpointUris("connect/authorize")
+            {
+                options.SetAuthorizationEndpointUris("connect/authorize")
                             .SetTokenEndpointUris("connect/token");
 
-                    options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
+                options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
 
-                    options.AllowAuthorizationCodeFlow();
+                options.AllowAuthorizationCodeFlow();
 
-                    options.AddDevelopmentEncryptionCertificate()
-                            .AddDevelopmentSigningCertificate();
+                options.AddDevelopmentEncryptionCertificate()
+                        .AddDevelopmentSigningCertificate();
 
-                    options.UseAspNetCore()
-                            .EnableAuthorizationEndpointPassthrough()
-                            .EnableTokenEndpointPassthrough();
+                options.UseAspNetCore()
+                        .EnableAuthorizationEndpointPassthrough()
+                        .EnableTokenEndpointPassthrough();
 
-                    options.DisableAccessTokenEncryption();
+                options.DisableAccessTokenEncryption();
 
-                }).AddClient(options =>
+            }).AddClient(options =>
+            {
+                options.AllowAuthorizationCodeFlow();
+                options.AddDevelopmentEncryptionCertificate()
+                       .AddDevelopmentSigningCertificate();
+
+                options.UseAspNetCore()
+                       .EnableRedirectionEndpointPassthrough();
+
+                options.UseSystemNetHttp();
+
+                // Register the Google integration.
+                options.UseWebProviders().AddGoogle(options =>
                 {
-                    options.AllowAuthorizationCodeFlow();
-                    options.AddDevelopmentEncryptionCertificate()
-                           .AddDevelopmentSigningCertificate();
-
-                    options.UseAspNetCore()
-                           .EnableRedirectionEndpointPassthrough();
-
-                    options.UseSystemNetHttp();
-
-                    // Register the Google integration.
-                    options.UseWebProviders().AddGoogle(options =>
-                    {
-                        options.SetClientId("client_id")
-                        .SetClientSecret("client_secrets")
-                        .SetRedirectUri("/signin-google")
-                        .SetProviderDisplayName("Sign In With Google")
-                        .AddScopes("email profile");
-                    });
-                }).AddValidation(options =>
-                {
-                    options.UseLocalServer();
-                    options.UseAspNetCore();
+                    options.SetClientId("client_id")
+                    .SetClientSecret("client_secrets")
+                    .SetRedirectUri("/signin-google")
+                    .SetProviderDisplayName("Sign In With Google")
+                    .AddScopes("email profile");
                 });
 
-            services.AddControllers();
-            services.AddRazorPages();
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(c =>
+            }).AddValidation(options =>
             {
-                c.LoginPath = "/Identity/Account/Login";
+                options.UseLocalServer();
+                options.UseAspNetCore();
             });
+
+            services.AddControllers();
+            services.AddRazorPages();            
+            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.Cookie.Name = "auth_cookie";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
+
+            services.AddAuthorizationBuilder()
+                .SetDefaultPolicy(new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build());
 
             services.AddTransient<AuthorizationService>();
 

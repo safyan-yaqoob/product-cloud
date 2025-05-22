@@ -2,6 +2,7 @@ using BillingService.Database;
 using BillingService.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 

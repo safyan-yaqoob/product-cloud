@@ -1,6 +1,6 @@
 using ProductCloud.SharedKernal.CQRS;
 
-namespace BillingService.Features.InitiateBilling
+namespace BillingService.Features.GetActiveCheckoutSession
 {
   public record GetActiveCheckoutSessionCommand(Guid TenantId) :ICommand<string>;
 }

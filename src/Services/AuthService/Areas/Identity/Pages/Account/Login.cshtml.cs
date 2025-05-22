@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace IdentityServer.Areas.Identity.Pages.Account
 {
@@ -43,6 +44,7 @@ namespace IdentityServer.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<LoginModel> _logger;
         public ViewModel View { get; set; }
 
         [BindProperty]
@@ -51,24 +53,43 @@ namespace IdentityServer.Areas.Identity.Pages.Account
         [BindProperty]
         public string ReturnUrl { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         public LoginModel(SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
             View = new ViewModel();
         }
 
-        public async Task<IActionResult> OnGet(string returnUrl = "/")
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            // If user is already signed in, redirect to home page
+            if (_signInManager.IsSignedIn(User))
+            {
+                return LocalRedirect("~/");
+            }
+
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
+
+            returnUrl ??= Url.Content("~/");
             ReturnUrl = returnUrl;
 
+            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             View.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             return Page();
         }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -80,9 +101,10 @@ namespace IdentityServer.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByNameAsync(Input.Username);
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, false);
+                    var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, true);
                     if (result.Succeeded)
                     {
+                        _logger.LogInformation("User logged in.");
                         var claims = new List<Claim>
                         {
                             new(ClaimTypes.Email, Input.Username),
@@ -94,7 +116,7 @@ namespace IdentityServer.Areas.Identity.Pages.Account
                         });
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        return Redirect(ReturnUrl);
+                        return LocalRedirect(returnUrl);
                     }
                     if (result.RequiresTwoFactor)
                     {
@@ -102,16 +124,15 @@ namespace IdentityServer.Areas.Identity.Pages.Account
                     }
                     if (result.IsLockedOut)
                     {
+                        _logger.LogWarning("User account locked out.");
                         return RedirectToPage("./Lockout");
                     }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
-                    }
                 }
+
+                ModelState.AddModelError(string.Empty, LoginOptions.InvalidCredentialsErrorMessage);
             }
 
+            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProductCloud.SharedKernal.CQRS;
 
-namespace BillingService.Features.InitiateBilling
+namespace BillingService.Features.GetActiveCheckoutSession
 {
     public static class GetActiveCheckoutSessionEndpoint
     {

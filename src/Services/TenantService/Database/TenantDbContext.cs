@@ -2,11 +2,13 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
+using TenantService.Database.Entities;
 
 namespace TenantService.Database
 {
   public class TenantDbContext(DbContextOptions<TenantDbContext> options) : DbContext(options)
   {
+    public DbSet<Tenant> Tenants { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);

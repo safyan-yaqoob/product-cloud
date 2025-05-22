@@ -20,6 +20,8 @@ namespace ProductService.Database.Configurations
       builder.Property(p => p.IsActive)
           .HasDefaultValue(true);
 
+      builder.Property(p => p.TenantId).IsRequired();
+
       builder.Property(p => p.CreatedAt)
           .HasDefaultValueSql("CURRENT_TIMESTAMP");
     }

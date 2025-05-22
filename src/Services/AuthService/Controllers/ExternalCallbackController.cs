@@ -48,6 +48,7 @@ namespace AuthService.Controllers
                 user = CreateUser();
                 user.Email = email;
                 user.UserName = email;
+                
                 var userCreateResult = await userManager.CreateAsync(user);
                 if (!userCreateResult.Succeeded)
                 {
@@ -56,10 +57,14 @@ namespace AuthService.Controllers
             }
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            identity.SetClaim(ClaimTypes.Email, email)
-                    .SetClaim(ClaimTypes.Name, authenticateResult.Principal.GetClaim(ClaimTypes.Name))
-                    .SetClaim(ClaimTypes.NameIdentifier, authenticateResult.Principal.GetClaim(ClaimTypes.NameIdentifier))
-                    .SetClaim(Claims.Private.RegistrationId, authenticateResult.Principal.GetClaim(Claims.Private.RegistrationId));
+            identity.AddClaim(new Claim(ClaimTypes.Email, email));
+            identity.AddClaim(new Claim(ClaimTypes.Name, authenticateResult.Principal.FindFirst(ClaimTypes.Name)?.Value ?? email));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, authenticateResult.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? user.Id.ToString()));
+
+            if (authenticateResult.Properties.Items.TryGetValue("registration_id", out var registrationId))
+            {
+                identity.AddClaim(new Claim("registration_id", registrationId));
+            }
 
             var properties = new AuthenticationProperties(authenticateResult.Properties.Items)
             {
@@ -75,7 +80,10 @@ namespace AuthService.Controllers
 
             await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return SignIn(new ClaimsPrincipal(identity), properties, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
+
+            return LocalRedirect(returnUrl);
         }
 
         private ActionResult RedirectToLoginPage(string returnUrl)

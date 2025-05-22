@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace System.Net.Http;
+namespace ServiceDefaults;
 
 public static class ServiceReferenceExtensions
 {

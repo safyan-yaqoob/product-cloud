@@ -1,8 +1,8 @@
 using BillingService.Features.AddPaymentMethod;
+using BillingService.Features.GetActiveCheckoutSession;
 using BillingService.Features.GetBillingByTenant;
 using BillingService.Features.GetInvoicesByTenant;
 using BillingService.Features.GetTenantPaymentMethods;
-using BillingService.Features.InitiateBilling;
 using BillingService.Features.RefundSubscriptionPayment;
 using BillingService.Features.StripeWebhook;
 using BillingService.Features.UpdatePaymentMethod;

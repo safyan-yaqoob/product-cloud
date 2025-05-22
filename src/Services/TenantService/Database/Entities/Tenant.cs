@@ -1,6 +1,6 @@
 using TenantService.Common;
 
-namespace TenantService.Entities
+namespace TenantService.Database.Entities
 {
 	public sealed class Tenant
 	{

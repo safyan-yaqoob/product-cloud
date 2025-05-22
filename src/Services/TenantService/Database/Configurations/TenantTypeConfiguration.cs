@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TenantService.Entities;
+using TenantService.Database.Entities;
 
 namespace TenantService.Database.Configurations
 {

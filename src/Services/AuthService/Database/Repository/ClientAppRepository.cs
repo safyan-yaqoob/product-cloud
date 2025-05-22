@@ -8,13 +8,13 @@ namespace AuthService.Database.Repository
     public class ClientAppRepository(
         IOpenIddictApplicationManager iddictManager,
         AuthDbContext context)
-    {
-        public async Task CreateClientAsync(ClientRecord client)
+    {        public async Task<string> CreateClientAsync(ClientRecord client)
         {
+            var clientSecret = Guid.NewGuid().ToString();
             var application = new OpenIddictApplicationDescriptor
             {
                 ClientId = client.ClientId,
-                ClientSecret = Guid.NewGuid().ToString(),
+                ClientSecret = clientSecret, // OpenIddict will hash this automatically
                 ApplicationType = ClientTypes.Public,
                 ConsentType = ConsentTypes.Explicit,
                 DisplayName = client.DisplayName,
@@ -41,9 +41,10 @@ namespace AuthService.Database.Repository
                 {
                     Requirements.Features.ProofKeyForCodeExchange // <- Enables PKCE
                 }
-            };
-
+            };            
+            
             await iddictManager.CreateAsync(application);
+            return clientSecret; // Return the original secret
         }
 
         public async Task<IEnumerable<ClientsSummaryRecord>> GetClientsAsync()
@@ -78,7 +79,8 @@ namespace AuthService.Database.Repository
                 ClientSecret = result.ClientSecret,
                 DisplayName = result.DisplayName,
             };
-        }
+        }        
+        
         public async Task UpdateClientAsync(EditClientRecord client)
         {
             var result = (OpenIddictEntityFrameworkCoreApplication)await iddictManager.FindByIdAsync(client.Id);
@@ -90,6 +92,26 @@ namespace AuthService.Database.Repository
             result.PostLogoutRedirectUris = client.PostLogoutRedirectUris.ToString();
 
             await iddictManager.UpdateAsync(result);
+        }
+
+        public async Task<string> RegenerateClientSecretAsync(string id)
+        {
+            var application = await iddictManager.FindByIdAsync(id);
+            if (application == null)
+            {
+                throw new InvalidOperationException("Client not found");
+            }
+
+            var newSecret = Guid.NewGuid().ToString();
+            // Create a new descriptor with the updated secret
+            var descriptor = new OpenIddictApplicationDescriptor();
+            await iddictManager.PopulateAsync(descriptor, application);
+            descriptor.ClientSecret = newSecret;
+
+            // Update the application with the new secret
+            await iddictManager.UpdateAsync(application, descriptor);
+
+            return newSecret;
         }
     }
 }

@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ProductService;
 using ProductService.Database;
 using ProductService.Extensions;
+using ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddDataSeeder();
+
 var app = builder.Build();
 
 app.ConfigurePipeline(builder.Configuration);
@@ -41,5 +45,12 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
     db.Database.Migrate(); // Apply any pending EF Core migrations
 }
+
+//if (app.Environment.IsDevelopment())
+//{
+//    using var scope = app.Services.CreateScope();
+//    var seeder = scope.ServiceProvider.GetRequiredService<ProductDataSeeder>();
+//    await seeder.SeedAsync();
+//}
 
 app.Run();

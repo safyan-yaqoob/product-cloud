@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
 
-namespace BillingService.Features.InitiateBilling
+namespace BillingService.Features.GetActiveCheckoutSession
 {
     public class GetActiveCheckoutSessionCommandHandler(BillingDbContext dbContext) : ICommandHandler<GetActiveCheckoutSessionCommand, string>
     {

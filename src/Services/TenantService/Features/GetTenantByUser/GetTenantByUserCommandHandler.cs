@@ -2,7 +2,7 @@
 using ProductCloud.SharedKernal.Common;
 using ProductCloud.SharedKernal.CQRS;
 using TenantService.Database;
-using TenantService.Entities;
+using TenantService.Database.Entities;
 using TenantService.Features.GetTenantById;
 
 namespace TenantService.Features.GetTenantByUser

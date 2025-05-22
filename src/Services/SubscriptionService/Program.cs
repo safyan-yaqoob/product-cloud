@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Hosting;
+using ServiceDefaults;
 using SubscriptionService.Database;
 using SubscriptionService.Extensions;
 

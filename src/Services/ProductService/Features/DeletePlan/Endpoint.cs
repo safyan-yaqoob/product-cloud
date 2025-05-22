@@ -1,5 +1,4 @@
-﻿using ProductService.Features.GetPlan;
-using ProductCloud.SharedKernal.CQRS;
+﻿using ProductCloud.SharedKernal.CQRS;
 
 namespace ProductService.Features.DeletePlan
 {
