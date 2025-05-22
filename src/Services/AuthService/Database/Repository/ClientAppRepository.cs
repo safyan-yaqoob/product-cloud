@@ -14,7 +14,7 @@ namespace AuthService.Database.Repository
             var application = new OpenIddictApplicationDescriptor
             {
                 ClientId = client.ClientId,
-                ClientSecret = clientSecret, // OpenIddict will hash this automatically
+                ClientSecret = clientSecret,
                 ApplicationType = ClientTypes.Public,
                 ConsentType = ConsentTypes.Explicit,
                 DisplayName = client.DisplayName,
@@ -39,12 +39,12 @@ namespace AuthService.Database.Repository
                 },
                 Requirements =
                 {
-                    Requirements.Features.ProofKeyForCodeExchange // <- Enables PKCE
+                    Requirements.Features.ProofKeyForCodeExchange
                 }
             };            
             
             await iddictManager.CreateAsync(application);
-            return clientSecret; // Return the original secret
+            return clientSecret;
         }
 
         public async Task<IEnumerable<ClientsSummaryRecord>> GetClientsAsync()
@@ -103,12 +103,12 @@ namespace AuthService.Database.Repository
             }
 
             var newSecret = Guid.NewGuid().ToString();
-            // Create a new descriptor with the updated secret
+
             var descriptor = new OpenIddictApplicationDescriptor();
             await iddictManager.PopulateAsync(descriptor, application);
             descriptor.ClientSecret = newSecret;
 
-            // Update the application with the new secret
+            application = await iddictManager.FindByIdAsync(id);
             await iddictManager.UpdateAsync(application, descriptor);
 
             return newSecret;

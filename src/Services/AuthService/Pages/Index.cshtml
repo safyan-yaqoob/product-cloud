@@ -1,10 +1,63 @@
 ﻿@page
-@model IndexModel
+@model IdentityServer.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome To</h1>
-    <p> See U Auth</p>
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <p class="mt-2 text-sm text-gray-700">
+                    Overview of your identity server statistics and activity.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-10 flex flex-row flex-wrap gap-2">
+            <div class="max-w-md mx-auto rounded-2xl shadow-lg bg-white dark:bg-zinc-900 p-6 transition-colors">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                        Registered Users
+                    </h3>
+                    <p class="text-base text-zinc-600 dark:text-zinc-400">@Model.TotalUsers</p>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-zinc-700 dark:text-zinc-300">
+                        Keep track of user registrations and manage access across the platform.
+                    </p>
+                </div>
+
+                <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4">
+                    <a href="/Admin/Users/Index"
+                       class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition">
+                        View all users →
+                    </a>
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto rounded-2xl shadow-lg bg-white dark:bg-zinc-900 p-6 transition-colors">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                        Registered Applications
+                    </h3>
+                    <p class="text-base text-zinc-600 dark:text-zinc-400">@Model.TotalClients</p>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-zinc-700 dark:text-zinc-300">
+                        Keep track of user registrations and manage access across the platform.
+                    </p>
+                </div>
+
+                <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4">
+                    <a href="/Admin/Clients/Index"
+                       class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition">
+                        View all applications →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

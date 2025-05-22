@@ -6,6 +6,9 @@
 	<title>@ViewData["Title"] - Auth Service</title>
 	<link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	
+	@await RenderSectionAsync("Head", required: false)
 </head>
 
 <body class="h-full">
@@ -77,6 +80,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/form-spinner.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

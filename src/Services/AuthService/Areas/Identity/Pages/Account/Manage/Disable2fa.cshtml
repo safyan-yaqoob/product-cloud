@@ -6,21 +6,45 @@
     Layout = "_Layout.cshtml";
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
+<div class="max-w-2xl mx-auto py-6">
+    <partial name="_StatusMessage" for="StatusMessage" />
+    
+    <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        </svg>
+        @ViewData["Title"]
+    </h3>
 
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>This action only disables 2FA.</strong>
-    </p>
-    <p>
-        Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a asp-page="./ResetAuthenticator">reset your authenticator keys.</a>
-    </p>
-</div>
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6" role="alert">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                    <strong>This action only disables 2FA.</strong>
+                </p>
+                <p class="mt-2 text-sm text-yellow-700">
+                    Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
+                    used in an authenticator app you should <a asp-page="./ResetAuthenticator" class="font-medium underline hover:text-yellow-800">reset your authenticator keys</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <form method="post">
-        <button class="btn btn-danger" type="submit">Disable 2FA</button>
-    </form>
+    <div class="mt-6">
+        <form method="post">
+            <button class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" type="submit">
+                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400 group-hover:text-red-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                    </svg>
+                </span>
+                Disable 2FA
+            </button>
+        </form>
+    </div>
 </div>

@@ -4,51 +4,61 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - See U Identity</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IdentityServer.styles.css" asp-append-version="true" />
 </head>
 
-<body>
-        <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">See U Identity</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+<body class="bg-gray-50">
+    <header>
+        <nav class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <a asp-area="" asp-page="/Index" class="text-xl font-semibold text-gray-800">See U Identity</a>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a asp-area="" asp-page="/Index" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900">Home</a>
+                            <a asp-area="" asp-page="/Privacy" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900">Privacy</a>
+                        </div>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                        <partial name="_LoginPartial" />
+                    </div>
+                    <div class="flex items-center sm:hidden">
+                        <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            <h1>Manage your account</h1>
-
-            <div>
-                <h2>Change your account settings</h2>
-                <hr />
-                <div class="row">
-                    <div class="col-md-3">
-                        <partial name="_ManageNav" />
-                    </div>
-                    <div class="col-md-9">
-                        @RenderBody()
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main>
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-4">Manage your account</h1>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Account settings</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="col-span-1">
+                                <partial name="_ManageNav" />
+                            </div>
+                            <div class="col-span-1 md:col-span-3">
+                                @RenderBody()
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
         </main>
     </div>
 
