@@ -1,31 +1,38 @@
 using AuthService.Database.Repository;
-using IdentityServer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using IdentityServer.Models;
 
 namespace IdentityServer.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ClientAppRepository _clientRepository;
+        private readonly ScopesRepository _scopesRepository;
 
-        public int TotalUsers { get; private set; }
-        public int TotalClients { get; private set; }
+        public int UsersCount { get; set; }
+        public int ClientsCount { get; set; }
+        public int ScopesCount { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager, ClientAppRepository clientRepository)
+        public IndexModel(
+            UserManager<ApplicationUser> userManager,
+            ClientAppRepository clientRepository,
+            ScopesRepository scopesRepository)
         {
-            _logger = logger;
             _userManager = userManager;
             _clientRepository = clientRepository;
+            _scopesRepository = scopesRepository;
         }
 
         public async Task OnGetAsync()
         {
-            TotalUsers = _userManager.Users.Count();
-            TotalClients = (await _clientRepository.GetClientsAsync()).Count();
+            UsersCount = await _userManager.Users.CountAsync();
+            ClientsCount = (await _clientRepository.GetClientsAsync()).Count();
+            ScopesCount = (await _scopesRepository.GetScopesAsync()).Count();
         }
     }
 }

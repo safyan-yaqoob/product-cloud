@@ -1,10 +1,12 @@
 using AuthService.Database;
 using AuthService.Database.Repository;
+using AuthService.Services;
 using IdentityServer;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using ProductCloud.SharedKernal.Infrastructure;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -16,9 +18,13 @@ namespace AuthService.Extensions
         {
             services.AddSharedInfrastructure(configuration);
 
+            // Configure EmailSender Options
+            services.Configure<EmailSenderOptions>(configuration.GetSection("EmailSender"));
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
-                o.SignIn.RequireConfirmedAccount = !true;
+                o.SignIn.RequireConfirmedAccount = true; // Enable email confirmation
                 o.Password = new PasswordOptions
                 {
                     RequireDigit = false,
@@ -90,13 +96,14 @@ namespace AuthService.Extensions
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options =>
             {
-                options.LoginPath = "/Identity/Account/Login";
-                options.LogoutPath = "/Identity/Account/Logout";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
                 options.Cookie.Name = "auth_cookie";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
+                options.ExpireTimeSpan = TimeSpan.FromHours(12);
+                options.SlidingExpiration = true;
             });
 
             services.AddAuthorizationBuilder()

@@ -26,6 +26,13 @@ namespace IdentityServer.Extensions
             app.MapControllers();
             app.MapRazorPages();
 
+            // Add default route
+            app.MapGet("/", context =>
+            {
+                context.Response.Redirect("/Index");
+                return Task.CompletedTask;
+            });
+
             return app;
         }
     }

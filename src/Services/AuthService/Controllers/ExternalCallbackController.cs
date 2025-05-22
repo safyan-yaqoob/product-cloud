@@ -88,7 +88,7 @@ namespace AuthService.Controllers
 
         private ActionResult RedirectToLoginPage(string returnUrl)
         {
-            return RedirectToPage("/Identity/Account/Login", new { ReturnUrl = returnUrl });
+            return RedirectToPage("/Login/Index", new { ReturnUrl = returnUrl });
         }
 
         private ApplicationUser CreateUser()

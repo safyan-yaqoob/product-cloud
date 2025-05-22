@@ -1,0 +1,185 @@
+@{
+    var isCollapsed = Context.Request.Cookies["sidebar-collapsed"] == "true";
+    var sidebarClass = isCollapsed ? "w-20" : "w-64";
+}
+
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Auth Service</title>
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    @await RenderSectionAsync("Head", required: false)
+</head>
+
+<body class="h-full">
+    @{
+        bool isAuthPage = Context.Request.Path.StartsWithSegments("/Identity/Account");
+
+        if (!isAuthPage)
+        {
+            <div class="flex h-screen bg-gray-50">
+                <!-- Sidebar -->
+                <div id="sidebar" class="fixed inset-y-0 left-0 z-10 bg-white shadow-lg transition-all duration-300 ease-in-out @sidebarClass">
+                    <!-- Logo -->
+                    <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+                        <a class="flex items-center text-xl font-semibold text-gray-900 whitespace-nowrap overflow-hidden" asp-area="" asp-page="/Index">
+                            <span class="@(isCollapsed ? "hidden" : "") ml-2">Auth Service</span>
+                        </a>
+                        <button id="toggleSidebar" class="p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav class="mt-5 px-2 space-y-1">
+                        @{
+                            var currentPage = Context.Request.Path;
+                            
+                            var navItems = new[]
+                            {
+                                new { 
+                                    Page = "/Index", 
+                                    Text = "Dashboard", 
+                                    Icon = "<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' />"
+                                },
+                                new { 
+                                    Page = "/Users/Index", 
+                                    Text = "Users", 
+                                    Icon = "<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' />"
+                                },
+                                new { 
+                                    Page = "/Clients/Index", 
+                                    Text = "Clients", 
+                                    Icon = "<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' />"
+                                }
+                            };
+
+                            foreach (var item in navItems)
+                            {
+                                var isActive = currentPage.StartsWithSegments(item.Page, StringComparison.OrdinalIgnoreCase);
+                                var activeClass = isActive ? "bg-gray-100 text-gray-900" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900";
+                                
+                                <a asp-page="@item.Page" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md @activeClass">
+                                    <span class="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            @Html.Raw(item.Icon)
+                                        </svg>
+                                    </span>
+                                    <span class="ml-3 @(isCollapsed ? "hidden" : "") ">
+                                        @item.Text
+                                    </span>
+                                </a>
+                            }
+                        }
+                    </nav>
+                    
+                    <!-- User Profile -->
+                    <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+
+                <!-- Main content -->
+                <div class="flex-1" style="margin-left: @(isCollapsed ? "80px" : "256px");">
+                    <!-- Top header -->
+                    <header class="bg-white shadow-sm sticky top-0 z-10">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div class="flex justify-between items-center">
+                                <h1 class="text-lg font-semibold text-gray-900">@ViewData["Title"]</h1>
+                                <!-- Add any header actions here -->
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Page content -->
+                    <main class="min-h-screen bg-gray-50">
+                        @RenderBody()
+                    </main>
+
+                    <!-- Footer -->
+                    <footer class="bg-white border-t border-gray-200 py-4">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="text-center text-sm text-gray-500">
+                                &copy; @DateTime.Now.Year - Auth Service - <a class="text-blue-600 hover:text-blue-800" asp-page="/Privacy">Privacy</a>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="min-h-full">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+                    <main role="main">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        }
+    }
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/form-spinner.js" asp-append-version="true"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('toggleSidebar');
+            let isCollapsed = @(isCollapsed.ToString().ToLower());
+            
+            function toggleSidebar() {
+                isCollapsed = !isCollapsed;
+                
+                // Toggle sidebar width
+                if (isCollapsed) {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    document.querySelectorAll('.sidebar-text').forEach(el => el.classList.add('hidden'));
+                    document.querySelectorAll('.sidebar-logo-text').forEach(el => el.classList.add('hidden'));
+                    document.querySelector('main').style.marginLeft = '80px';
+                } else {
+                    sidebar.classList.remove('w-20');
+                    sidebar.classList.add('w-64');
+                    document.querySelectorAll('.sidebar-text').forEach(el => el.classList.remove('hidden'));
+                    document.querySelectorAll('.sidebar-logo-text').forEach(el => el.classList.remove('hidden'));
+                    document.querySelector('main').style.marginLeft = '256px';
+                }
+                
+                // Save preference to cookie
+                document.cookie = `sidebar-collapsed=${isCollapsed}; path=/; max-age=${60 * 60 * 24 * 30}`; // 30 days
+            }
+            
+            // Initialize sidebar state
+            if (isCollapsed) {
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-20');
+                document.querySelectorAll('.sidebar-text').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.sidebar-logo-text').forEach(el => el.classList.add('hidden'));
+                document.querySelector('main').style.marginLeft = '80px';
+            }
+            
+            // Add event listener to toggle button
+            if (toggleButton) {
+                toggleButton.addEventListener('click', toggleSidebar);
+            }
+            
+            // Make sidebar toggle available globally
+            window.toggleSidebar = toggleSidebar;
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

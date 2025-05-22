@@ -1,3 +1,11 @@
-﻿@{
-    Layout = "_Layout";
+@{
+    bool isAuthenticated = Context.User.Identity?.IsAuthenticated ?? false;
+    if (isAuthenticated)
+    {
+        Layout = "_LayoutWithSidebar";
+    }
+    else
+    {
+        Layout = "_LayoutNoAuth";
+    }
 }

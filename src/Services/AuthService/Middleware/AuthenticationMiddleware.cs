@@ -12,11 +12,11 @@ public class AuthenticationMiddleware
     {
         _next = next;        _allowedPaths = new[]
         {
-            "/Identity/Account/Login",
-            "/Identity/Account/Register",
-            "/Identity/Account/ExternalLogin",
-            "/Identity/Account/ForgotPassword",
-            "/Identity/Account/ResetPassword",
+            "/Login/Index",
+            "/Register",
+            "/ExternalLogin",
+            "/ForgotPassword",
+            "/ResetPassword",
             "/signin-google",
             "/connect/authorize",
             "/connect/token",
@@ -40,7 +40,7 @@ public class AuthenticationMiddleware
         if (!context.User.Identity?.IsAuthenticated == true)
         {
             // Don't redirect if we're already on the login page (prevents redirect loop)
-            if (context.Request.Path.StartsWithSegments("/Identity/Account/Login"))
+            if (context.Request.Path.StartsWithSegments("/Login/Index"))
             {
                 await _next(context);
                 return;
@@ -50,7 +50,7 @@ public class AuthenticationMiddleware
             var returnUrl = context.Request.Path + context.Request.QueryString;
             
             // Redirect to login page with return URL
-            context.Response.Redirect($"/Identity/Account/Login?ReturnUrl={Uri.EscapeDataString(returnUrl)}");
+            context.Response.Redirect($"/Login/Index?ReturnUrl={Uri.EscapeDataString(returnUrl)}");
             return;
         }
 

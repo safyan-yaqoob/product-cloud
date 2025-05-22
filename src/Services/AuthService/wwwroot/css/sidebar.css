@@ -1,0 +1,132 @@
+/* Sidebar styles */
+@media (max-width: 767.98px) {
+    .w-64 {
+        width: 100%;
+    }
+    
+    .flex-1 {
+        flex: 1 1 100%;
+    }
+
+    /* Mobile sidebar */
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 40;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #sidebar:not(.mobile-sidebar-open) {
+        transform: translateX(-100%);
+    }
+}
+
+/* Responsive sidebar */
+@media (min-width: 768px) {
+    .w-64 {
+        width: 256px;
+    }
+    
+    .flex-1 {
+        flex: 1 1 0%;
+    }
+}
+
+/* Active link styles */
+.bg-gray-100 {
+    background-color: #f3f4f6;
+}
+
+/* Hover effects */
+.hover\:bg-gray-50:hover {
+    background-color: #f9fafb;
+}
+
+/* Navigation icons */
+.w-5 {
+    width: 1.25rem;
+}
+
+.h-5 {
+    height: 1.25rem;
+}
+
+.mr-3 {
+    margin-right: 0.75rem;
+}
+
+/* Sidebar transitions */
+#sidebar {
+    transition: width 0.3s ease-in-out;
+    will-change: width;
+}
+
+/* Sidebar link styles */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-link:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.sidebar-link.active {
+    background-color: #e5e7eb;
+    color: #111827;
+    font-weight: 600;
+}
+
+.sidebar-link svg {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+    color: #9ca3af;
+    transition: color 0.2s ease-in-out;
+}
+
+.sidebar-link:hover svg,
+.sidebar-link.active svg {
+    color: #4b5563;
+}
+
+/* Collapsed sidebar */
+.sidebar-collapsed .sidebar-text {
+    display: none;
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+}
+
+@media (max-width: 767.98px) {
+    .sidebar-overlay {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .sidebar-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
