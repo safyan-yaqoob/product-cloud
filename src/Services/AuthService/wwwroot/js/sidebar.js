@@ -5,34 +5,75 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuButton = document.getElementById('mobileMenuButton');
     const mobileMenu = document.getElementById('mobileMenu');
     
+    // Function to get cookie value
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    // Function to set cookie
+    function setCookie(name, value, days = 365) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = `expires=${date.toUTCString()}`;
+        document.cookie = `${name}=${value};${expires};path=/`;
+    }
+    
     // Check for saved sidebar state
-    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    const isCollapsed = getCookie('sidebar-collapsed') === 'true';
     
     // Initialize sidebar state
     function initSidebar() {
         if (isCollapsed) {
             document.body.classList.add('sidebar-collapsed');
-            if (sidebar) sidebar.classList.add('w-20');
-            if (sidebar) sidebar.classList.remove('w-64');
+            if (sidebar) {
+                sidebar.classList.add('w-20');
+                sidebar.classList.remove('w-64');
+                toggleTextVisibility(true);
+            }
         } else {
             document.body.classList.remove('sidebar-collapsed');
-            if (sidebar) sidebar.classList.remove('w-20');
-            if (sidebar) sidebar.classList.add('w-64');
+            if (sidebar) {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-64');
+                toggleTextVisibility(false);
+            }
         }
+    }
+    
+    // Toggle text visibility
+    function toggleTextVisibility(hide) {
+        const textElements = sidebar.querySelectorAll('.nav-text');
+        textElements.forEach(el => {
+            if (hide) {
+                el.classList.add('hidden');
+            } else {
+                el.classList.remove('hidden');
+            }
+        });
     }
     
     // Toggle sidebar
     function toggleSidebar() {
-        const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+        const willCollapse = !document.body.classList.contains('sidebar-collapsed');
+        document.body.classList.toggle('sidebar-collapsed');
         
-        if (isCollapsed) {
-            if (sidebar) sidebar.classList.add('w-20');
-            if (sidebar) sidebar.classList.remove('w-64');
-            localStorage.setItem('sidebarCollapsed', 'true');
+        if (willCollapse) {
+            if (sidebar) {
+                sidebar.classList.add('w-20');
+                sidebar.classList.remove('w-64');
+                toggleTextVisibility(true);
+            }
+            setCookie('sidebar-collapsed', 'true');
         } else {
-            if (sidebar) sidebar.classList.remove('w-20');
-            if (sidebar) sidebar.classList.add('w-64');
-            localStorage.setItem('sidebarCollapsed', 'false');
+            if (sidebar) {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-64');
+                toggleTextVisibility(false);
+            }
+            setCookie('sidebar-collapsed', 'false');
         }
     }
     

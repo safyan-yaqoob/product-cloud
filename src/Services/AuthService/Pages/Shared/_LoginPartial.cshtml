@@ -2,6 +2,9 @@
 @using IdentityServer.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var isCollapsed = Context.Request.Cookies["sidebar-collapsed"] == "true";
+}
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -14,27 +17,37 @@
                     </svg>
                 </div>
             </div>
-            <div class="ml-3">
-                <div class="text-sm font-medium text-gray-700">@User.Identity?.Name</div>
-            </div>
+            @if (!isCollapsed)
+            {
+                <div class="ml-3">
+                    <div class="text-sm font-medium text-gray-700">@User.Identity?.Name</div>
+                </div>
+            }
         </div>
         <a href="/Logout" class="mt-2 block">
             <div class="flex w-full items-center gap-x-2 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50">
                 <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                 </svg>
-                Sign out
+                @if (!isCollapsed)
+                {
+                    <span>Sign out</span>
+                }
             </div>
         </a>
     </div>
-    }
-    else
-    {
-        <a class="text-sm font-medium text-gray-700 hover:text-gray-900" asp-area="Identity" asp-page="/Account/Register">
-            Register
-        </a>
-        <a class="text-sm font-medium text-blue-600 hover:text-blue-800" asp-area="Identity" asp-page="/Account/Login">
-            Login
-        </a>
-    }
-</div>
+}
+else
+{
+    <div class="flex flex-col gap-2">
+        @if (!isCollapsed)
+        {
+            <a class="text-sm font-medium text-gray-700 hover:text-gray-900" asp-area="Identity" asp-page="/Account/Register">
+                Register
+            </a>
+            <a class="text-sm font-medium text-blue-600 hover:text-blue-800" asp-area="Identity" asp-page="/Account/Login">
+                Login
+            </a>
+        }
+    </div>
+}

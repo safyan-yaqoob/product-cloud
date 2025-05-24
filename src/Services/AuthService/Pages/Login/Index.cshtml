@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model LoginModel
 
 @{
@@ -49,10 +49,7 @@
             </div>
 
             <div>
-                <button type="submit" id="login-submit"
-                        class="flex w-full justify-center items-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors duration-200">
-                    Sign in
-                </button>
+                <partial name="_SubmitButtonPartial" model='(Text: "Sign in", Id: "login-submit")' />
             </div>
         </form>
 
@@ -78,9 +75,7 @@
                 <div class="mt-6 grid grid-cols-@(Model.View.ExternalLogins.Count() > 2 ? "3" : Model.View.ExternalLogins.Count().ToString()) gap-4">
                     @foreach (var provider in Model.View.ExternalLogins)
                     {
-                        <a asp-page="./ExternalLogin"
-                           asp-route-provider="@provider.Name"
-                           asp-route-returnUrl="@Model.ReturnUrl"
+                        <a href="/signin-google?returnUrl=@Model.ReturnUrl"
                            class="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-600 transition-all duration-200">
                             <span>@provider.DisplayName</span>
                         </a>
@@ -97,10 +92,20 @@
     <script>
         (function() {
             const form = document.getElementById('account');
-            form.addEventListener('submit', function() {
-                const submitButton = document.getElementById('login-submit');
+            const submitButton = document.getElementById('login-submit');
+            
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    return;
+                }
                 submitButton.classList.add('loading');
             });
+
+            // Remove loading state if form is invalid after validation
+            form.addEventListener('invalid', function() {
+                submitButton.classList.remove('loading');
+            }, true);
         })();
     </script>
 }

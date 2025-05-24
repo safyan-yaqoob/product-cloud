@@ -11,15 +11,6 @@
 
 <body class="h-full">
     <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <a href="/" class="flex justify-center">
-                <h1 class="text-3xl font-bold text-gray-900">Auth Service</h1>
-            </a>
-            <h2 class="mt-6 text-center text-2xl font-bold text-gray-900">
-                @ViewData["Title"]
-            </h2>
-        </div>
-
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 @RenderBody()
@@ -31,7 +22,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/form-spinner.js" asp-append-version="true"></script>
+
     
     @await RenderSectionAsync("Scripts", required: false)
 </body>

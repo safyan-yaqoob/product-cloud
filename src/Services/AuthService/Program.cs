@@ -35,6 +35,18 @@ internal class Program
 
         var app = builder.Build();
 
+        if (app.Environment.IsDevelopment())
+        {
+            // Configure global exception handling for production
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
+        }
+        else
+        {
+            // Show developer exception page in development
+            app.UseDeveloperExceptionPage();
+        }
+
         app.ConfigurePipeline();
 
         using (var scope = app.Services.CreateScope())
@@ -42,6 +54,7 @@ internal class Program
             var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
             db.Database.Migrate();
         }
+
         app.Run();
     }
 }

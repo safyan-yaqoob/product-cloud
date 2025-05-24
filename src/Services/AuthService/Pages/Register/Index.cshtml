@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -43,16 +43,13 @@
             </div>
 
             <div>
-                <button type="submit" id="registerSubmit"
-                        class="flex w-full justify-center items-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors duration-200">
-                    Create account
-                </button>
+                <partial name="_SubmitButtonPartial" model='(Text: "Create account", Id: "registerSubmit")' />
             </div>
         </form>
 
         <p class="mt-10 text-center text-sm text-slate-500">
             Already have an account?
-            <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
+            <a asp-page="/Login/Index" asp-route-returnUrl="@Model.ReturnUrl" class="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
                 Sign in here
             </a>
         </p>
@@ -92,10 +89,20 @@
     <script>
         (function() {
             const form = document.getElementById('registerForm');
-            form.addEventListener('submit', function() {
-                const submitButton = document.getElementById('registerSubmit');
+            const submitButton = document.getElementById('registerSubmit');
+            
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    return;
+                }
                 submitButton.classList.add('loading');
             });
+
+            // Remove loading state if form is invalid after validation
+            form.addEventListener('invalid', function() {
+                submitButton.classList.remove('loading');
+            }, true);
         })();
     </script>
 }
