@@ -20,6 +20,8 @@ namespace BillingService.Extensions
                 app.UseSwaggerUI();
             }
 
+            app.UseCors();
+
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 

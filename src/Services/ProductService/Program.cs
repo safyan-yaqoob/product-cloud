@@ -31,14 +31,9 @@ app.ConfigurePipeline(builder.Configuration);
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-    db.Database.Migrate(); // Apply any pending EF Core migrations
+    db.Database.Migrate(); 
+    var seeder = scope.ServiceProvider.GetRequiredService<ProductDataSeeder>();
+    await seeder.SeedAsync();
 }
-
-//if (app.Environment.IsDevelopment())
-//{
-//    using var scope = app.Services.CreateScope();
-//    var seeder = scope.ServiceProvider.GetRequiredService<ProductDataSeeder>();
-//    await seeder.SeedAsync();
-//}
 
 app.Run();
