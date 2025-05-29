@@ -8,12 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="MassTransit" />
-	  <PackageReference Include="MassTransit.RabbitMQ" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" />
-	  <PackageReference Include="Microsoft.Extensions.Caching.Redis" />
-	  <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
-	  <PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="MassTransit" />
+		<PackageReference Include="MassTransit.RabbitMQ" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Redis" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 	</ItemGroup>
 
 </Project>

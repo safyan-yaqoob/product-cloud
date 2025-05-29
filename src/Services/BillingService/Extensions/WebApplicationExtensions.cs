@@ -23,7 +23,13 @@ namespace BillingService.Extensions
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapGroup("/billing")
+              .RequireAuthorization()
               .MapGetBillingById()
               .MapGetInvoicesByTenant()
               .MapAddPaymentMethod()

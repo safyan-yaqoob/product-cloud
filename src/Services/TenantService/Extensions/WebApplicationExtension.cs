@@ -20,7 +20,12 @@ namespace TenantService.Extensions
 			app.UseHttpsRedirection();
 			app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-			app.MapGroup("/api/tenants")
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapGroup("/api/tenants")
 				.RequireRateLimiting("TenantApi")
 				.RequireAuthorization()
 				.MapCreateTenant()
@@ -29,7 +34,7 @@ namespace TenantService.Extensions
 				.MapGetTenantByUser()
 				.MapUpdateTenant();
 
-			return app;
+            return app;
 		}
 	}
 }

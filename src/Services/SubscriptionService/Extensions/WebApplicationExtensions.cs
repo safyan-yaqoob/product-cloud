@@ -20,12 +20,19 @@ namespace SubscriptionService.Extensions
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapGroup("/subscription")
-              .MapCreateSubscription()
-              .MapGetSubscriptionsByTenant()
-              .MapUpdateSubscriptionPlan()
-              .MapCancelSubscription()
-              .MapReactivateSubscription();
+                .RequireAuthorization()
+                .MapCreateSubscription()
+                .MapGetSubscriptionsByTenant()
+                .MapUpdateSubscriptionPlan()
+                .MapCancelSubscription()
+                .MapReactivateSubscription();
 
             return app;
         }

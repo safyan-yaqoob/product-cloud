@@ -22,23 +22,30 @@ namespace ProductService.Extensions
 				app.UseSwaggerUI();
 			}
 
-			app.UseHttpsRedirection();
+            app.UseCors();
+
+            app.UseHttpsRedirection();
 			app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-			app.MapGroup("/api/products")
-			   .MapCreateProductEndpoint()
-			   .MapGetProductsEndpoint()
-			   .MapGetProductByIdEndpoint()
-			   .MapDeleteProductEndpoint()
-			   .MapUpdateProductEndpoint();
+            app.UseRouting();
 
-			app.MapGroup("/api/plans")
-			   .MapCreatePlanEndpoint()
-			   .MapGetPlansEndpoint()
-			   .MapDeletePlanEndpoint()
-			   .MapGetPlanFeaturesEndpoint();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.MapGrpcService<PlanGrpc.PlanGrpcBase>();
+            app.MapGroup("/api/products")
+               .MapCreateProductEndpoint()
+               .MapGetProductsEndpoint()
+               .MapGetProductByIdEndpoint()
+               .MapDeleteProductEndpoint()
+               .MapUpdateProductEndpoint();
+
+            app.MapGroup("/api/plans")
+               .MapCreatePlanEndpoint()
+               .MapGetPlansEndpoint()
+               .MapDeletePlanEndpoint()
+               .MapGetPlanFeaturesEndpoint();
+
+            app.MapGrpcService<PlanGrpc.PlanGrpcBase>();
 
 			return app;
 		}

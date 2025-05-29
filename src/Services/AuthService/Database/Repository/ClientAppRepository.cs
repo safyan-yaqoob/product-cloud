@@ -5,10 +5,9 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AuthService.Database.Repository
 {
-    public class ClientAppRepository(
-        IOpenIddictApplicationManager iddictManager,
-        AuthDbContext context)
-    {        public async Task<string> CreateClientAsync(ClientRecord client)
+    public class ClientAppRepository(IOpenIddictApplicationManager iddictManager, AuthDbContext context)
+    {        
+        public async Task<OpenIddictEntityFrameworkCoreApplication> CreateClientAsync(ClientRecord client)
         {
             var clientSecret = Guid.NewGuid().ToString();
             var application = new OpenIddictApplicationDescriptor
@@ -44,7 +43,10 @@ namespace AuthService.Database.Repository
             };            
             
             await iddictManager.CreateAsync(application);
-            return clientSecret;
+
+            var clientApp = (OpenIddictEntityFrameworkCoreApplication)(await iddictManager.FindByClientIdAsync(application.ClientId));
+
+            return clientApp;
         }
 
         public async Task<IEnumerable<ClientsSummaryRecord>> GetClientsAsync()
@@ -85,8 +87,6 @@ namespace AuthService.Database.Repository
         {
             var result = (OpenIddictEntityFrameworkCoreApplication)await iddictManager.FindByIdAsync(client.Id);
 
-            result.ClientId = client.ClientId;
-            result.ClientSecret = client.ClientSecret;
             result.DisplayName = client.DisplayName;
             result.RedirectUris = client.RedirectUri.ToString();
             result.PostLogoutRedirectUris = client.PostLogoutRedirectUris.ToString();

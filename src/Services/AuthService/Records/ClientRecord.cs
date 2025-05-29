@@ -4,16 +4,16 @@ namespace IdentityServer.Records
 {
     public record ClientRecord
     {
+        public Guid? Id { get; set; }
+
         [Required(ErrorMessage = "Client ID is required")]
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         [Required(ErrorMessage = "Display Name is required")]
         public string DisplayName { get; set; }
         [Required(ErrorMessage = "Redirect URI is required")]
-        [Url(ErrorMessage = "Please enter a valid URL")]
         public string RedirectUri { get; set; }
         [Required(ErrorMessage = "Post Logout Redirect URIs are required")]
-        [Url(ErrorMessage = "Please enter a valid URL")]
         public string PostLogoutRedirectUris { get; set; }
     }
 

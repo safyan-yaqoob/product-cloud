@@ -21,24 +21,12 @@ builder.AddNpgsqlDbContext<ProductDbContext>("productDb", null, options =>
 });
 
 builder.Services.AddServices(builder.Configuration);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("customPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-    });
-});
-
 builder.Services.AddDataSeeder();
 
 var app = builder.Build();
 
 app.ConfigurePipeline(builder.Configuration);
 
-app.UseCors();
 
 using (var scope = app.Services.CreateScope())
 {

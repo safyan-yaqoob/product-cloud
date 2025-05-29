@@ -12,7 +12,9 @@ namespace IdentityServer.Pages.Clients
         public AddClient(ClientAppRepository repository)
         {
             _repository = repository;
-        }        [BindProperty]
+        }        
+        
+        [BindProperty]
         public ClientRecord InputModel { get; set; }
 
         public bool Created { get; set; }
@@ -20,11 +22,29 @@ namespace IdentityServer.Pages.Clients
         public void OnGet()
         {
             InputModel = new ClientRecord();
-        }        public async Task<IActionResult> OnPostAsync()
+        }        
+        
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                InputModel.ClientSecret = await _repository.CreateClientAsync(InputModel);
+                var clientApp = await _repository.CreateClientAsync(InputModel);
+                if(clientApp == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to create client application.");
+                    return Page();
+                }
+
+                if(Guid.TryParse(clientApp.Id, out var id))
+                {
+                    InputModel.Id = id;
+                }
+
+                InputModel.ClientSecret = clientApp.ClientSecret;
+                InputModel.ClientId = clientApp.ClientId;
+                InputModel.DisplayName = clientApp.DisplayName;
+                InputModel.RedirectUri = clientApp.RedirectUris.ToString();
+                InputModel.PostLogoutRedirectUris = clientApp.PostLogoutRedirectUris.ToString();
                 Created = true;
             }
 

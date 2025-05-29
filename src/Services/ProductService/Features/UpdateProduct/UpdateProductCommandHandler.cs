@@ -6,9 +6,9 @@ using ProductService.Database.Entities;
 
 namespace ProductService.Features.UpdateProduct;
 
-public class UpdateProductCommandHandler(ProductDbContext dbContext) : ICommandHandler<UpdateProductCommand>
+public class UpdateProductCommandHandler(ProductDbContext dbContext) : ICommandHandler<UpdateProductCommand, Guid>
 {
-    public async Task Handle(UpdateProductCommand command, CancellationToken cancellationToken = default)
+    public async Task<Guid> Handle(UpdateProductCommand command, CancellationToken cancellationToken = default)
     {
         var product = await dbContext.Set<Product>().FirstOrDefaultAsync(e=>e.Id == command.Id, cancellationToken);
         if (product == null)
@@ -19,5 +19,7 @@ public class UpdateProductCommandHandler(ProductDbContext dbContext) : ICommandH
         product.IsActive = true;
         
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        return product.Id;
     }
 }

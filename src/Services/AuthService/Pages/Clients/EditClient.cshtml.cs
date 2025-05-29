@@ -11,7 +11,9 @@ namespace IdentityServer.Pages.Clients
         public EditClient(ClientAppRepository repository)
         {
             _repository = repository;
-        }        [BindProperty]
+        }        
+        
+        [BindProperty]
         public EditClientRecord InputModel { get; set; }
 
         public string ErrorMessage { get; set; }

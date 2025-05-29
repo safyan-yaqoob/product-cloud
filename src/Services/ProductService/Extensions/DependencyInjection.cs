@@ -9,11 +9,20 @@ namespace ProductService.Extensions
 	{
 		public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddEndpointsApiExplorer();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("customPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+            });
+            services.AddEndpointsApiExplorer();
 			services.AddSwaggerGen();
 
 			services.AddSharedInfrastructure(configuration);
-			services.AddMessageBroker<ProductDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
+            services.AddMessageBroker<ProductDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
 
 			services.Scan(selector =>
 			{
