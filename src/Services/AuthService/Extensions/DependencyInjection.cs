@@ -130,7 +130,7 @@ namespace AuthService.Extensions
 
             services.AddTransient<ClientAppRepository>();
             services.AddTransient<ScopesRepository>();
-            services.AddScoped<IdentityDataSeeder>();
+            services.AddScoped<AuthDataSeeder>();
 
             return services;
         }

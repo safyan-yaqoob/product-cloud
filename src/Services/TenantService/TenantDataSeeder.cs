@@ -20,7 +20,7 @@ public class TenantDataSeeder
     {
         try
         {
-            if (!_context.Tenants.Any())
+            if (!_context.Set<Tenant>().Any())
             {
                 // Define industries for realistic data
                 var industries = new[] { "Technology", "Healthcare", "Finance", "Education", "Manufacturing", "Retail" };
@@ -53,7 +53,7 @@ public class TenantDataSeeder
                         .SetValue(t, DateTime.UtcNow.AddDays(daysToAdd));
                 });
 
-                await _context.Tenants.AddRangeAsync(tenants);
+                await _context.Set<Tenant>().AddRangeAsync(tenants);
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Seed data added successfully: {Count} tenants created", tenants.Count);

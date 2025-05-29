@@ -2,44 +2,42 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
-using TenantService.Database.Entities;
 
 namespace TenantService.Database
 {
-  public class TenantDbContext(DbContextOptions<TenantDbContext> options) : DbContext(options)
-  {
-    public DbSet<Tenant> Tenants { get; set; }
-    protected override void OnModelCreating(ModelBuilder builder)
+    public class TenantDbContext(DbContextOptions<TenantDbContext> options) : DbContext(options)
     {
-      base.OnModelCreating(builder);
-
-      builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-      // If we will use PostgreSql db then below in the name convention code
-      // how it create the db table name and table properties name.
-      foreach (var entity in builder.Model.GetEntityTypes())
-      {
-        // Replace table names
-        entity.SetTableName(entity.GetTableName()?.Underscore());
-
-        var ecommerceObjectIdentifier = StoreObjectIdentifier.Table(entity.GetTableName()?.Underscore()!, entity.GetSchema());
-
-        // Replace column names
-        foreach (var property in entity.GetProperties())
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-          property.SetColumnName(property.GetColumnName(ecommerceObjectIdentifier)?.Underscore());
-        }
+            base.OnModelCreating(builder);
 
-        foreach (var key in entity.GetKeys())
-        {
-          key.SetName(key.GetName()?.Underscore());
-        }
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        foreach (var key in entity.GetForeignKeys())
-        {
-          key.SetConstraintName(key.GetConstraintName()?.Underscore());
+            // If we will use PostgreSql db then below in the name convention code
+            // how it create the db table name and table properties name.
+            foreach (var entity in builder.Model.GetEntityTypes())
+            {
+                // Replace table names
+                entity.SetTableName(entity.GetTableName()?.Underscore());
+
+                var ecommerceObjectIdentifier = StoreObjectIdentifier.Table(entity.GetTableName()?.Underscore()!, entity.GetSchema());
+
+                // Replace column names
+                foreach (var property in entity.GetProperties())
+                {
+                    property.SetColumnName(property.GetColumnName(ecommerceObjectIdentifier)?.Underscore());
+                }
+
+                foreach (var key in entity.GetKeys())
+                {
+                    key.SetName(key.GetName()?.Underscore());
+                }
+
+                foreach (var key in entity.GetForeignKeys())
+                {
+                    key.SetConstraintName(key.GetConstraintName()?.Underscore());
+                }
+            }
         }
-      }
     }
-  }
 }

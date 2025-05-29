@@ -15,9 +15,11 @@ namespace TenantService.Extensions
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
-			}
+            }
 
-			app.UseHttpsRedirection();
+            app.UseCors();
+
+            app.UseHttpsRedirection();
 			app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseRouting();

@@ -11,37 +11,31 @@ builder.AddServiceDefaults();
 
 builder.AddNpgsqlDbContext<TenantDbContext>("tenantDb", null, options =>
 {
-	options.UseNpgsql(
-		builder.Configuration.GetConnectionString("tenantDb"),
-		npgsql => npgsql.MigrationsAssembly(typeof(TenantDbContext).Assembly.GetName().Name)
-	);
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("tenantDb"),
+        npgsql => npgsql.MigrationsAssembly(typeof(TenantDbContext).Assembly.GetName().Name)
+    );
 
-	options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
-		   .EnableDetailedErrors();
+    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+           .EnableDetailedErrors();
 });
 
 builder.Services.AddServices(builder.Configuration);
-
 builder.Services.AddDataSeeder();
 
 var app = builder.Build();
-
 app.ConfigurePipeline(builder.Configuration);
 
-app.UseCors();
-
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
-	var db = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
-	db.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
+        db.Database.Migrate();
+
+        var seeder = scope.ServiceProvider.GetRequiredService<TenantDataSeeder>();
+        await seeder.SeedAsync();
+    }
 }
-
-
-//if (app.Environment.IsDevelopment())
-//{
-//    using var scope = app.Services.CreateScope();
-//    var seeder = scope.ServiceProvider.GetRequiredService<TenantDataSeeder>();
-//    await seeder.SeedAsync();
-//}
 
 app.Run();

@@ -71,7 +71,7 @@ namespace IdentityServer.Pages.Login
             // If user is already signed in, redirect to home page
             if (_signInManager.IsSignedIn(User))
             {
-                return LocalRedirect("~/");
+                return LocalRedirect(returnUrl ?? "~/");
             }
 
             if (!string.IsNullOrEmpty(ErrorMessage))

@@ -107,7 +107,7 @@ namespace AuthService.Controllers
 			var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType, Claims.Name, Claims.Role);
 
 			// Add the subject claim
-			var subjectClaim = new Claim(Claims.Subject, email);
+			var subjectClaim = new Claim(Claims.Subject, user.Id.ToString());
 			subjectClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
 			identity.AddClaim(subjectClaim);
 
@@ -130,8 +130,12 @@ namespace AuthService.Controllers
 				identity.AddClaim(roleClaim);
 			}
 
-			identity.SetScopes(request.GetScopes());
-			identity.SetResources(await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync());
+            var scopes = request.GetScopes();
+
+            identity.SetScopes(scopes);
+            var resources = await scopeManager.ListResourcesAsync(identity.GetScopes()).ToListAsync();
+
+            identity.SetResources(resources);
 
 			return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 		}

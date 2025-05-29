@@ -13,7 +13,7 @@ namespace TenantService.Extensions
 			services.AddEndpointsApiExplorer();
 			services.AddSwaggerGen();
 
-			services.AddSharedInfrastructure(configuration);
+            services.AddSharedInfrastructure(configuration);
 
 			services.AddMessageBroker<TenantDbContext>(configuration, AppDomain.CurrentDomain.GetAssemblies());
 
